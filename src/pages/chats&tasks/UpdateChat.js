@@ -3,16 +3,18 @@ import {
   Grid,
   Checkbox,
   // Container,
-  // Divider,
+  IconButton,
   Typography,
   Paper,
   Button,
   Divider,
+  Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "material-react-toastify";
 import Editor from "../../components/Texteditor";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 const UpdateChat = () => {
   const { _id } = useParams();
   const [chatDetails, setChatDetails] = useState("");
@@ -31,7 +33,10 @@ const UpdateChat = () => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
+      console.log("get chat by id", data);
+
       setChatDetails(data.chat);
+
       setChatSubject(data.chat.chatsubject);
       setTime(data.chat.updatedAt);
       setAccountName(data.chat.accountid.accountName);
@@ -48,12 +53,11 @@ const UpdateChat = () => {
           ? { ...task, checked: task.checked === "true" ? "false" : "true" }
           : task
       );
-  
+
       updateClientTask(updatedTasks);
       return updatedTasks;
     });
   };
-  
 
   const updateClientTask = (updatedTasks) => {
     const myHeaders = new Headers();
@@ -61,7 +65,7 @@ const UpdateChat = () => {
 
     const raw = JSON.stringify({
       chatId: _id,
-      taskUpdates: updatedTasks.map(task => ({
+      taskUpdates: updatedTasks.map((task) => ({
         id: task.id,
         text: task.text,
         checked: task.checked.toString(), // Ensure boolean is sent as string "true"/"false"
@@ -77,26 +81,34 @@ const UpdateChat = () => {
       redirect: "follow",
     };
 
-    fetch(`http://127.0.0.1/chats/chatsaccountwise/updateTaskCheckedStatus`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
+    fetch(
+      `http://127.0.0.1/chats/chatsaccountwise/updateTaskCheckedStatus`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
         console.log("Backend response:", result);
-        const allChecked = updatedTasks.every(task => task.checked === true || task.checked === "true");
+        const allChecked = updatedTasks.every(
+          (task) => task.checked === true || task.checked === "true"
+        );
 
         if (allChecked) {
-          const taskMessages = updatedTasks.map(task => `• <s>${task.text}</s>`).join("<br>");
+          const taskMessages = updatedTasks
+            .map((task) => `• <s>${task.text}</s>`)
+            .join("<br>");
           // const taskMessages = updatedTasks.map(task => `• ${task.text}`).join("\n");
-          console.log("All tasks are checked. Updating description:", taskMessages);
+          console.log(
+            "All tasks are checked. Updating description:",
+            taskMessages
+          );
           updateChatDescription(taskMessages);
-        }
-         else {
+        } else {
           console.log("Not all tasks are checked. Description not updated.");
         }
       })
-      .catch(error => console.error("Error updating task:", error));
+      .catch((error) => console.error("Error updating task:", error));
   };
 
-  
   useEffect(() => {
     getsChatDetails();
   }, []);
@@ -119,35 +131,35 @@ const UpdateChat = () => {
   const updateChatDescription = (message = "") => {
     const contentToSend = message.trim() || editorContent.trim();
     if (!contentToSend) return;
-  
+
     const newDescription = {
       message: contentToSend,
       fromwhome: "client",
     };
-  
+
     setChatDescriptions((prevDescriptions) => [
       ...prevDescriptions,
       { ...newDescription, time: new Date().toISOString() },
     ]);
-  
+
     setEditorContent("");
-  
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-  
+
     const raw = JSON.stringify({
       newDescriptions: [newDescription],
     });
-  
+
     const requestOptions = {
       method: "PATCH",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
-  
+
     const url = `http://127.0.0.1/chats/chatsaccountwise/chatupdatemessage/${_id}`;
-  
+
     fetch(url, requestOptions)
       .then((response) => {
         if (!response.ok) {
@@ -163,54 +175,7 @@ const UpdateChat = () => {
         toast.error("Failed to update chat description. Please try again.");
       });
   };
-  
-  // const updateChatDescription = () => {
-  //   if (!editorContent.trim()) return;
 
-  //   const newDescription = {
-  //     message: editorContent,
-  //     fromwhome: "client",
-  //   };
-
-  //   setChatDescriptions((prevDescriptions) => [
-  //     ...prevDescriptions,
-  //     { ...newDescription, time: new Date().toISOString() },
-  //   ]);
-
-  //   setEditorContent("");
-
-  //   const myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-
-  //   const raw = JSON.stringify({
-  //     newDescriptions: [newDescription],
-  //   });
-
-  //   const requestOptions = {
-  //     method: "PATCH",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  //   const url = `http://127.0.0.1/chats/chatsaccountwise/chatupdatemessage/${_id}`;
-
-  //   fetch(url, requestOptions)
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((result) => {
-  //       toast.success("Chat description updated successfully");
-  //       setEditorContent("");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //       toast.error("Failed to update chat description. Please try again.");
-  //     });
-  // };
   return (
     <Box
       sx={{
@@ -247,6 +212,13 @@ const UpdateChat = () => {
                 const messageTime = desc.time
                   ? formatDate(desc.time)
                   : "Just now";
+                // Determine sender display name
+                let senderDisplayName = "";
+                if (isClient) {
+                  senderDisplayName = "You";
+                } else if (isAdmin && desc.senderid?.username) {
+                  senderDisplayName = desc.senderid.username;
+                }
 
                 return (
                   <Box
@@ -261,6 +233,9 @@ const UpdateChat = () => {
                       sx={{
                         maxWidth: "75%",
                         backgroundColor: isAdmin ? "#ffe6e6" : "#e6f0ff",
+                        // backgroundColor: isAdmin 
+                        // ? theme => theme.palette.error.light 
+                        // : theme => theme.palette.info.light,
                         p: 2,
                         borderRadius: 2,
                         borderTopLeftRadius: isClient ? 16 : 4,
@@ -268,16 +243,18 @@ const UpdateChat = () => {
                         boxShadow: 1,
                       }}
                     >
-                      {/* <Typography
-                        variant="body2"
-                        sx={{ whiteSpace: "pre-wrap", color: "#333" }}
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            typeof desc.message === "string"
-                              ? desc.message.replace(/<[^>]+>/g, "")
-                              : desc.message || "No message available",
-                        }}
-                      /> */}
+                      <Box sx={{display:'flex',  justifyContent:'space-between',color: "#333"}}>   <Typography
+                        variant="subtitle2"
+                        component="p"
+                        gutterBottom
+                        sx={{ fontWeight: "600" }}
+                      >
+                        {senderDisplayName}
+                      </Typography>
+
+                      <MoreVertIcon fontSize="small" sx={{cursor:'pointer'}}/></Box>
+                   
+
                       <Typography
                         variant="body2"
                         sx={{ whiteSpace: "pre-wrap", color: "#333" }}
@@ -315,7 +292,6 @@ const UpdateChat = () => {
           >
             <Editor onChange={handleEditorChange} value={editorContent} />
             <Button
-              // onClick={updateChatDescription}
               onClick={() => updateChatDescription()}
               variant="contained"
               sx={{ height: "fit-content", alignSelf: "end" }}
@@ -338,54 +314,33 @@ const UpdateChat = () => {
               Client Tasks
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            {/* <Box display="flex" flexDirection="column" gap={2}>
-              {tasks.map((task, index) => (
-                <Box key={index} display="flex" alignItems="center" gap={1}>
-                  <Checkbox
-                    checked={task.checked === "true"}
-                   
-                    onChange={() => handleCheckboxChange(index)} // use index instead of task.id
 
-                  />
-                  <Box
-                    sx={{
-                      p: 1,
-                      width: "100%",
-                      textDecoration: task.checked === "true" ? "line-through" : "none",
-                    }}
-                  >
-                    <Typography variant="body1">{task.text}</Typography>
+            <Box display="flex" flexDirection="column" gap={2}>
+              {tasks.length > 1 ? (
+                tasks.map((task, index) => (
+                  <Box key={index} display="flex" alignItems="center" gap={1}>
+                    <Checkbox
+                      checked={task.checked === "true"}
+                      onChange={() => handleCheckboxChange(index)}
+                    />
+                    <Box
+                      sx={{
+                        p: 1,
+                        width: "100%",
+                        textDecoration:
+                          task.checked === "true" ? "line-through" : "none",
+                      }}
+                    >
+                      <Typography variant="body1">{task.text}</Typography>
+                    </Box>
                   </Box>
-                </Box>
-              ))}
-            </Box> */}
-
-<Box display="flex" flexDirection="column" gap={2}>
-  {tasks.length > 1 ? (
-    tasks.map((task, index) => (
-      <Box key={index} display="flex" alignItems="center" gap={1}>
-        <Checkbox
-          checked={task.checked === "true"}
-          onChange={() => handleCheckboxChange(index)}
-        />
-        <Box
-          sx={{
-            p: 1,
-            width: "100%",
-            textDecoration: task.checked === "true" ? "line-through" : "none",
-          }}
-        >
-          <Typography variant="body1">{task.text}</Typography>
-        </Box>
-      </Box>
-    ))
-  ) : (
-    <Typography variant="body2" color="text.secondary">
-      No task is assigned
-    </Typography>
-  )}
-</Box>
-
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No task is assigned
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Grid>
       </Grid>

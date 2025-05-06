@@ -234,8 +234,8 @@ const ChatsTasks = () => {
                         chat.description[0]?.message.replace(/<[^>]+>/g, "") ||
                         "";
                       const words = cleanText.split(/\s+/);
-                      return words.length > 20
-                        ? words.slice(0, 20).join(" ") + "..."
+                      return words.length > 35
+                        ? words.slice(0, 35).join(" ") + "..."
                         : cleanText;
                     })()}
                   </Typography>

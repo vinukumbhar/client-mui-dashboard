@@ -5,8 +5,10 @@ import { Stack, Typography } from "@mui/material";
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from "@mui/material/styles";
 const ChatsList = () => {
   const [chats, setChats] = useState([]);
+    const theme = useTheme();
 
   useEffect(() => {
     const fetchUnreadChats = async () => {
@@ -15,6 +17,8 @@ const ChatsList = () => {
           "http://127.0.0.1/chats/unreadmessages"
         );
         setChats(response.data.chats || []);
+        console.log("unread chat messages",response.data.chats)
+       
       } catch (error) {
         console.error("Error fetching unread chats:", error);
       }
@@ -96,7 +100,7 @@ const ChatsList = () => {
           </Stack>
 
           <Box mt={2}>
-            {chats.map((chat) => (
+            {/* {chats.map((chat) => (
               <Stack key={chat._id} mb={1.5}>
                 <Paper sx={{ p: 2 ,cursor:'pointer'}} onClick={() => handleShowChat(chat._id)}>
                   <Typography variant="subtitle2" fontWeight="bold">
@@ -109,14 +113,38 @@ const ChatsList = () => {
                     />
                     <Typography variant="body2" color="text.secondary">
                       <strong>
-                        {chat.latestMessage?.fromwhome?.toLowerCase()}:
+                        
+                      {chat.latestMessage?.fromwhome?.username}
+                        
                       </strong>{" "}
                       {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
                     </Typography>
                   </Stack>
                 </Paper>
               </Stack>
-            ))}
+            ))} */}
+            {chats.map((chat) => {
+  const messageData = chat.latestMessage?._doc || {};
+  const sender = messageData.senderid?.username || "Unknown Sender";
+ 
+
+  return (
+    <Stack key={chat._id} mb={1.5}>
+      <Paper sx={{ p: 2, cursor: "pointer" }} onClick={() => handleShowChat(chat._id)}>
+        <Typography variant="subtitle2" fontWeight="bold">
+          {chat.chatsubject}
+        </Typography>
+        <Stack direction="row" alignItems="flex-start" spacing={1}>
+          <SendIcon fontSize="small" sx={{ color: theme.palette.success.main, mt: "3px" }} />
+          <Typography variant="body2" color="text.secondary">
+            {sender} : {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
+          </Typography>
+        </Stack>
+      </Paper>
+    </Stack>
+  );
+})}
+
           </Box>
         </Box>
       )}
