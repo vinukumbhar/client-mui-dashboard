@@ -623,7 +623,7 @@ const UpdateChat = () => {
             <Divider sx={{ mb: 2 }} />
 
             <Box display="flex" flexDirection="column" gap={2}>
-              {tasks.length > 1 ? (
+              {tasks.length > 0 ? (
                 tasks.map((task, index) => (
                   <Box key={index} display="flex" alignItems="center" gap={1}>
                     <Checkbox
