@@ -12,14 +12,27 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "material-react-toastify";
 import Editor from "../../components/Texteditor";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { LoginContext } from "../../context/Context";
+import axios from "axios";
 const UpdateChat = () => {
+  const { logindata } = useContext(LoginContext);
+  console.log("login data", logindata);
+  const [loginUserId, setLoginUserId] = useState();
+
+  useEffect(() => {
+    if (logindata?.user?.id) {
+      setLoginUserId(logindata.user.id);
+    }
+  }, [logindata]);
+
+  console.log("Login User ID:", loginUserId);
+
   const messageRefs = useRef({});
   const [highlightedId, setHighlightedId] = useState(null);
 
@@ -48,7 +61,8 @@ const UpdateChat = () => {
       setTime(data.chat.updatedAt);
       setAccountName(data.chat.accountid.accountName);
       setChatDescriptions(data.chat.description || []);
-      setTasks(data.chat.clienttasks.flat());
+    setTasks(data.chat.clienttasks.flat());
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -100,9 +114,9 @@ const UpdateChat = () => {
         );
 
         if (allChecked) {
-          const taskMessages = `completed client tasks <br>` + updatedTasks
-            .map((task) => `• <s>${task.text}</s>`)
-            .join("<br>");
+          const taskMessages =
+            `completed client tasks <br>` +
+            updatedTasks.map((task) => `• <s>${task.text}</s>`).join("<br>");
           // const taskMessages = updatedTasks.map(task => `• ${task.text}`).join("\n");
           console.log(
             "All tasks are checked. Updating description:",
@@ -267,6 +281,7 @@ const UpdateChat = () => {
     const newDescription = {
       message: contentToSend,
       fromwhome: "client",
+      senderid: loginUserId,
     };
 
     if (replyTo) {
@@ -298,9 +313,39 @@ const UpdateChat = () => {
       })
       .then(() => {
         toast.success("Message sent");
+        updatechatStatus(_id);
         getsChatDetails();
       })
       .catch(() => toast.error("Send failed"));
+  };
+
+  const updatechatStatus = (_id) => {
+    return new Promise((resolve, reject) => {
+      let data = JSON.stringify({
+        chatstatus: false,
+      });
+
+      let config = {
+        method: "PATCH",
+        maxBodyLength: Infinity,
+        url: `http://127.0.0.1/chats/chatsaccountwise/${_id}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          console.log("Status updated:", JSON.stringify(response.data));
+          resolve(); // Resolve the promise if successful
+        })
+        .catch((error) => {
+          console.error("Error updating chat status:", error);
+          reject(error); // Reject the promise if there's an error
+        });
+    });
   };
 
   useEffect(() => {
@@ -465,7 +510,7 @@ const UpdateChat = () => {
                         >
                           {senderDisplayName}
                         </Typography>
-                        
+
                         <MoreVertIcon
                           fontSize="small"
                           sx={{ cursor: "pointer" }}
