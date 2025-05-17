@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Document from "./pages/Documents/Document";
 import ChatsTasks from "./pages/chats&tasks/ChatsTasks";
 import Organizers from "./pages/Organizers";
-import Proposals from "./pages/Proposals";
+import Proposals from "./pages/proposals/Proposals";
 import UpdateChat from "./pages/chats&tasks/UpdateChat";
 const App = () => {
   

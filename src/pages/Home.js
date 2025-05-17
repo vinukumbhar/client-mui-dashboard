@@ -11,7 +11,7 @@ import OrganizersList from "../components/Home Components/OrganizersList";
 import BillingList from "../components/Home Components/BillingList";
 import DocumentsList from "../components/Home Components/DocumentsList";
 import ChatsList from "../components/Home Components/ChatsList";
-
+import ProposalsList from "../components/Home Components/ProposalsList"
 const Home = () => {
   return (
     <Box
@@ -43,6 +43,7 @@ const Home = () => {
           <BillingList />
           <DocumentsList />
           <ChatsList />
+          <ProposalsList/>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <QuickLinks />
