@@ -1,87 +1,30 @@
-// import React, { useState, useEffect } from "react";
-// import Box from "@mui/material/Box";
-// import Paper from "@mui/material/Paper";
-// import { Stack, Typography } from "@mui/material";
 
-// const ProposalsList = () => {
-//   const [proposals, setProposals] = useState([]);
-//   const fetchPrprosalsAllData = async () => {
-//     try {
-//       const url =
-//         "http://127.0.0.1/proposalandels/proposalaccountwise/allproposallist/list";
-
-//       const response = await fetch(url);
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch Proposals templates");
-//       }
-//       const result = await response.json();
-//       console.log(result.proposalesandelsAccountwise);
-//       setProposals(result.proposalesandelsAccountwise || []);
-//     } catch (error) {
-//       console.error("Error fetching Proposals  templates:", error);
-//     }
-//   };
-//   useEffect(() => {
-//     fetchPrprosalsAllData();
-//   }, []);
-//   return (
-//     <>
-//       {proposals.length > 0 && (
-//         <Box>
-//           <Stack
-//             sx={{
-//               p: 0,
-//               display: "flex",
-//               alignItems: "center",
-//               justifyContent: "space-between",
-//               flexDirection: "row",
-//             }}
-//           >
-//             <Typography
-//               component="h2"
-//               variant="subtitle2"
-//               gutterBottom
-//               sx={{ fontWeight: "600" }}
-//             >
-//               Proposals & ELs ({proposals.length})
-//             </Typography>
-//           </Stack>
-//           <Box mt={2}>
-//             <Stack mb={1.5}>
-//               <Paper sx={{ p: 3 }}>one</Paper>
-//             </Stack>
-//             <Stack mb={1.5}>
-//               <Paper sx={{ p: 3 }}>one</Paper>
-//             </Stack>
-//           </Box>
-//         </Box>
-//       )}
-//     </>
-//   );
-// };
-
-// export default ProposalsList;
 
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import { Stack, Typography, Link } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Stack,
+  Typography,
+
+} from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 
+import ProposalDialog from "../../pages/proposals/ProposalDialog"; 
 const ProposalsList = () => {
   const [proposals, setProposals] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState(null);
 
   const fetchProposalsAllData = async () => {
     try {
-      const url =
-        "http://127.0.0.1/proposalandels/proposalaccountwise/allproposallist/list";
+      const url = "http://127.0.0.1/proposalandels/pending";
 
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch Proposals templates");
       }
       const result = await response.json();
-      console.log(result.proposalesandelsAccountwise);
       setProposals(result.proposalesandelsAccountwise || []);
     } catch (error) {
       console.error("Error fetching Proposals templates:", error);
@@ -91,6 +34,16 @@ const ProposalsList = () => {
   useEffect(() => {
     fetchProposalsAllData();
   }, []);
+
+  const handleOpenDialog = (proposal) => {
+    setSelectedProposal(proposal);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedProposal(null);
+  };
 
   return (
     <>
@@ -118,6 +71,7 @@ const ProposalsList = () => {
             {proposals.map((proposal, index) => (
               <Stack key={index} mb={1.5}>
                 <Paper
+                  onClick={() => handleOpenDialog(proposal)}
                   sx={{
                     p: 2,
                     borderRadius: 2,
@@ -151,7 +105,7 @@ const ProposalsList = () => {
                         variant="body2"
                         sx={{ color: "text.secondary", cursor: "pointer" }}
                       >
-                        {proposal.proposalname || "Engagement proposal"}
+                        {proposal.proposalname}
                       </Typography>
                     </Box>
                     <Typography
@@ -178,6 +132,15 @@ const ProposalsList = () => {
           </Box>
         </Box>
       )}
+
+      {/* Fullscreen Dialog */}
+
+      <ProposalDialog
+  open={openDialog}
+  handleClose={handleCloseDialog}
+  proposal={selectedProposal}
+/>
+
     </>
   );
 };
