@@ -11,30 +11,35 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 
 import ProposalDialog from "../../pages/proposals/ProposalDialog"; 
-const ProposalsList = () => {
+const ProposalsList = ({accountId}) => {
   const [proposals, setProposals] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
-
+console.log("vhjs", accountId)
   const fetchProposalsAllData = async () => {
     try {
-      const url = "http://127.0.0.1/proposalandels/pending";
+      const url = `http://127.0.0.1/proposalandels/proposals/pending/${accountId}`;
 
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch Proposals templates");
       }
       const result = await response.json();
-      setProposals(result.proposalesandelsAccountwise || []);
+console.log("result proposals", result)
+      setProposals(result.pendingProposals || []);
     } catch (error) {
       console.error("Error fetching Proposals templates:", error);
     }
   };
-
-  useEffect(() => {
+console.log("acc proposals", proposals)
+  // useEffect(() => {
+  //   fetchProposalsAllData();
+  // }, []);
+useEffect(() => {
+  if (accountId) {
     fetchProposalsAllData();
-  }, []);
-
+  }
+}, [accountId]);
   const handleOpenDialog = (proposal) => {
     setSelectedProposal(proposal);
     setOpenDialog(true);

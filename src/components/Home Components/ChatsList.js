@@ -6,26 +6,30 @@ import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from "@mui/material/styles";
-const ChatsList = () => {
+const ChatsList = ({accountId}) => {
   const [chats, setChats] = useState([]);
     const theme = useTheme();
 
-  useEffect(() => {
-    const fetchUnreadChats = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1/chats/unreadmessages"
-        );
-        setChats(response.data.chats || []);
-        console.log("unread chat messages",response.data.chats)
-       
-      } catch (error) {
-        console.error("Error fetching unread chats:", error);
-      }
-    };
+ useEffect(() => {
+  const fetchUnreadChats = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1/chats/unread/${accountId}`
+      );
+      setChats(response.data.chats || []);
+      console.log("unread chat messages", response.data.chats);
+    } catch (error) {
+      console.error("Error fetching unread chats:", error);
+    }
+  };
 
+  if (accountId) {
     fetchUnreadChats();
-  }, []);
+  }
+}, [accountId]);
+
+
+
   const stripHtmlAndLimit = (html, wordLimit) => {
     if (!html) return "";
     const plainText = html.replace(/<[^>]+>/g, " "); // strip HTML tags
