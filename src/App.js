@@ -6,7 +6,7 @@ import SignIn from "./login-signup/Signin";
 import Home from "./pages/Home";
 import Document from "./pages/Documents/Document";
 import ChatsTasks from "./pages/chats&tasks/ChatsTasks";
-import Organizers from "./pages/Organizers";
+import Organizers from "./pages/Organizers/Organizers";
 import Proposals from "./pages/proposals/Proposals";
 import UpdateChat from "./pages/chats&tasks/UpdateChat";
 const App = () => {

@@ -79,7 +79,7 @@ const [accountId, setAccountId] = useState();
               Waiting for action
             </Typography>
           </Stack>
-          <OrganizersList />
+          <OrganizersList accountId={accountId}/>
           <BillingList />
           <DocumentsList />
           <ChatsList accountId={accountId}/>
