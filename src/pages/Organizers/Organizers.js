@@ -68,6 +68,7 @@ const Organizers = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedOrganizer(null);
+    // fetchOrganizers();
   };
   return (
     <Box sx={{ width: "100%", maxWidth: "1700px", p: 2 }}>
@@ -80,7 +81,7 @@ const Organizers = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <strong>Proposal Name</strong>
+                <strong>Organizer Name</strong>
               </TableCell>
               <TableCell>
                 <strong>Seal</strong>
@@ -124,15 +125,7 @@ const Organizers = () => {
                 <TableCell>
                   <Chip
                     label={row.status || "Pending"}
-                    color={
-                      row.status === "Signed"
-                        ? "success"
-                        : row.status === "Partially Signed"
-                        ? "error"
-                        : row.status === "Pending"
-                        ? "warning"
-                        : "default"
-                    }
+                    color={row.status === "Completed" ? "success" : "default"}
                     size="small"
                     sx={{ border: "none" }}
                   />
