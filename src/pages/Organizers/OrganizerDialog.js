@@ -16,17 +16,17 @@ import {
 
 import { LinearProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { toast } from "material-react-toastify";
-import dayjs from 'dayjs';
-const OrganizerDialog = ({ open, handleClose, organizer, }) => {
+import dayjs from "dayjs";
+const OrganizerDialog = ({ open, handleClose, organizer }) => {
   const sections = organizer?.sections; // Assigned const here
-  console.log("organizer", organizer)
+  console.log("organizer", organizer);
   const [selectedDropdownValues, setSelectedDropdownValues] = useState({});
   const [inputValues, setInputValues] = useState({});
   const [selectedYesNoValues, setSelectedYesNoValues] = useState({});
@@ -34,7 +34,8 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
   const [checkboxValues, setCheckboxValues] = useState({});
   const [answeredElements, setAnsweredElements] = useState({});
   const [activeStep, setActiveStep] = useState(0);
- const [startDate, setStartDate] = useState(dayjs());
+  const [startDate, setStartDate] = useState(dayjs());
+
   const handleRadioChange = (value, elementText, sectionId) => {
     const key = `${sectionId}_${elementText}`;
     setRadioValues((prevValues) => ({
@@ -225,10 +226,6 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
     setActiveStep(selectedIndex);
   };
 
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-  };
-
   const handleSubmit = async () => {
     try {
       const myHeaders = new Headers();
@@ -337,63 +334,76 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
   };
 
   useEffect(() => {
-  if (organizer?.sections) {
-    const newInputValues = {};
-    const newRadioValues = {};
-    const newCheckboxValues = {};
-    const newSelectedYesNoValues = {};
-    const newSelectedDropdownValues = {};
-    const newAnsweredElements = {};
-    let initialDate = dayjs();
+    if (organizer?.sections) {
+      const newInputValues = {};
+      const newRadioValues = {};
+      const newCheckboxValues = {};
+      const newSelectedYesNoValues = {};
+      const newSelectedDropdownValues = {};
+      const newAnsweredElements = {};
+      let initialDate = dayjs();
 
-    organizer.sections.forEach((section) => {
-      section.formElements.forEach((element) => {
-        const key = `${section.id}_${element.text}`;
-        
-        if (element.textvalue) {
-          newAnsweredElements[key] = true;
-          
-          switch (element.type) {
-            case 'Free Entry':
-            case 'Email':
-            case 'Number':
-              newInputValues[key] = element.textvalue;
-              break;
-            case 'Radio Buttons':
-              newRadioValues[key] = element.textvalue;
-              break;
-            case 'Checkboxes':
-              // For checkboxes, textvalue is a comma-separated string
-              const selectedOptions = element.textvalue.split(',').map(s => s.trim());
-              newCheckboxValues[key] = {};
-              element.options.forEach(option => {
-                newCheckboxValues[key][option.text] = selectedOptions.includes(option.text);
-              });
-              break;
-            case 'Yes/No':
-              newSelectedYesNoValues[key] = element.textvalue;
-              break;
-            case 'Dropdown':
-              newSelectedDropdownValues[key] = element.textvalue;
-              break;
-            case 'Date':
-               initialDate = dayjs(element.textvalue);
-              break;
+      organizer.sections.forEach((section) => {
+        section.formElements.forEach((element) => {
+          const key = `${section.id}_${element.text}`;
+
+          if (element.textvalue) {
+            newAnsweredElements[key] = true;
+
+            switch (element.type) {
+              case "Free Entry":
+              case "Email":
+              case "Number":
+                newInputValues[key] = element.textvalue;
+                break;
+              case "Radio Buttons":
+                newRadioValues[key] = element.textvalue;
+                break;
+              case "Checkboxes":
+                // For checkboxes, textvalue is a comma-separated string
+                const selectedOptions = element.textvalue
+                  .split(",")
+                  .map((s) => s.trim());
+                newCheckboxValues[key] = {};
+                element.options.forEach((option) => {
+                  newCheckboxValues[key][option.text] =
+                    selectedOptions.includes(option.text);
+                });
+                break;
+              case "Yes/No":
+                newSelectedYesNoValues[key] = element.textvalue;
+                break;
+              case "Dropdown":
+                newSelectedDropdownValues[key] = element.textvalue;
+                break;
+              case "Date":
+                initialDate = dayjs(element.textvalue);
+                break;
+            }
           }
-        }
+        });
       });
-    });
 
-    setInputValues(newInputValues);
-    setRadioValues(newRadioValues);
-    setCheckboxValues(newCheckboxValues);
-    setSelectedYesNoValues(newSelectedYesNoValues);
-    setSelectedDropdownValues(newSelectedDropdownValues);
-    setAnsweredElements(newAnsweredElements);
-    setStartDate(initialDate);
-  }
-}, [organizer]);
+      setInputValues(newInputValues);
+      setRadioValues(newRadioValues);
+      setCheckboxValues(newCheckboxValues);
+      setSelectedYesNoValues(newSelectedYesNoValues);
+      setSelectedDropdownValues(newSelectedDropdownValues);
+      setAnsweredElements(newAnsweredElements);
+      setStartDate(initialDate);
+    }
+  }, [organizer]);
 
+  // const isElementActive = (element) => {
+  //   return element.active === true; // Returns true if active, false otherwise
+  // };
+  const isElementActive = (element) => {
+    // If organizer is sealed, disable all elements
+    if (organizer?.issealed) return true;
+
+    // Otherwise, follow the element's active status
+    return element.active === true;
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog fullScreen open={open} onClose={handleClose}>
@@ -419,7 +429,7 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
             fullWidth
             sx={{ marginBottom: "10px", marginTop: "10px" }}
           >
-            <Select
+            {/* <Select
               value={activeStep}
               onChange={handleDropdownChange}
               size="small"
@@ -439,6 +449,35 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                 return (
                   <MenuItem key={section.id} value={index}>
                     {section.text} ({answeredCount}/{totalElements})
+                  </MenuItem>
+                );
+              })}
+            </Select> */}
+            <Select
+              value={activeStep}
+              onChange={handleDropdownChange}
+              size="small"
+            >
+              {visibleSections.map((section, index) => {
+                // Filter form elements that are actually visible
+                const visibleElements = section.formElements.filter((el) =>
+                  shouldShowElement(el, section.id)
+                );
+
+                // Count answered visible elements
+                const answeredCount = visibleElements.reduce(
+                  (count, element) => {
+                    const key = `${section.id}_${element.text}`;
+                    return count + (answeredElements[key] ? 1 : 0);
+                  },
+                  0
+                );
+
+                const totalVisibleElements = visibleElements.length;
+
+                return (
+                  <MenuItem key={section.id} value={index}>
+                    {section.text} ({answeredCount}/{totalVisibleElements})
                   </MenuItem>
                 );
               })}
@@ -484,6 +523,7 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                   {element.text}
                                 </Typography>
                                 <TextField
+                                  disabled={isElementActive(element)}
                                   variant="outlined"
                                   size="small"
                                   multiline
@@ -524,6 +564,7 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                   {element.text}
                                 </Typography>
                                 <TextField
+                                  disabled={isElementActive(element)}
                                   variant="outlined"
                                   size="small"
                                   multiline
@@ -586,7 +627,9 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                           ? "contained"
                                           : "outlined"
                                       }
+                                      disabled={isElementActive(element)}
                                       onClick={() =>
+                                        !isElementActive(element) &&
                                         handleRadioChange(
                                           option.text,
                                           element.text,
@@ -634,7 +677,9 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                           ? "contained"
                                           : "outlined"
                                       }
+                                      disabled={isElementActive(element)}
                                       onClick={() =>
+                                        !isElementActive(element) &&
                                         handleCheckboxChange(
                                           option.text,
                                           element.text,
@@ -676,7 +721,9 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                           ? "contained"
                                           : "outlined"
                                       }
+                                      disabled={isElementActive(element)}
                                       onClick={() =>
+                                        !isElementActive(element) &&
                                         handleYesNoChange(
                                           option.text,
                                           element.text,
@@ -714,6 +761,7 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                         `${section.id}_${element.text}`
                                       ] || ""
                                     }
+                                    disabled={isElementActive(element)}
                                     onChange={(event) =>
                                       handleDropdownValueChange(
                                         event,
@@ -765,23 +813,31 @@ const OrganizerDialog = ({ open, handleClose, organizer, }) => {
                                   }
                                 /> */}
                                 <DatePicker
-  format="DD/MM/YYYY"
-  sx={{
-    width: "100%",
-    backgroundColor: "#fff",
-  }}
-  value={startDate}
-  onChange={(newValue) => {
-    setStartDate(newValue);
-    setAnsweredElements((prevAnswered) => ({
-      ...prevAnswered,
-      [`${section.id}_${element.text}`]: true,
-    }));
-  }}
-  renderInput={(params) => (
-    <TextField {...params} size="small" />
-  )}
-/>
+                                  format="DD/MM/YYYY"
+                                  sx={{
+                                    width: "100%",
+                                    backgroundColor: "#fff",
+                                  }}
+                                  value={startDate}
+                                  disabled={isElementActive(element)}
+                                  onChange={(newValue) => {
+                                    // setStartDate(newValue);
+                                    // setAnsweredElements((prevAnswered) => ({
+                                    //   ...prevAnswered,
+                                    //   [`${section.id}_${element.text}`]: true,
+                                    // }));
+                                    if (!isElementActive(element)) {
+                                      setStartDate(newValue);
+                                      setAnsweredElements((prev) => ({
+                                        ...prev,
+                                        [`${section.id}_${element.text}`]: true,
+                                      }));
+                                    }
+                                  }}
+                                  renderInput={(params) => (
+                                    <TextField {...params} size="small" />
+                                  )}
+                                />
                               </Box>
                             )}
 
