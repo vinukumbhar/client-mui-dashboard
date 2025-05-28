@@ -7,7 +7,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import TelegramIcon from "@mui/icons-material/Telegram";
-const QuickLinks = () => {
+const QuickLinks = ({accountId}) => {
   return (
     <>
      <Paper sx={{ height: "auto" }}>

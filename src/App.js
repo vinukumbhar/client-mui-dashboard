@@ -1,6 +1,5 @@
-
 import React from "react";
-import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import SignIn from "./login-signup/Signin";
 import Home from "./pages/Home";
@@ -9,8 +8,10 @@ import ChatsTasks from "./pages/chats&tasks/ChatsTasks";
 import Organizers from "./pages/Organizers/Organizers";
 import Proposals from "./pages/proposals/Proposals";
 import UpdateChat from "./pages/chats&tasks/UpdateChat";
+import Invoices from "./pages/Billing/Invoices";
+import PayInvoice from "./pages/Billing/PayInvoice";
+
 const App = () => {
-  
   return (
     <>
       <BrowserRouter>
@@ -20,12 +21,13 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/document" element={<Document />} />
             <Route path="/chatstasks" element={<ChatsTasks />} />
-            <Route path="/updatechat/:_id" element={<UpdateChat/>} />
+            <Route path="/updatechat/:_id" element={<UpdateChat />} />
 
             <Route path="/organizers" element={<Organizers />} />
-
+            <Route path="/billing" element={<Invoices />} />
+            <Route path="/payinvoice" element={<PayInvoice/>}/>
             <Route path="/proposalsels" element={<Proposals />} />
-            {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Route>
         </Routes>
       </BrowserRouter>

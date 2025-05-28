@@ -229,7 +229,7 @@ const Proposals = () => {
         Proposals & ELs
       </Typography>
 
-      <TableContainer elevation={3}>
+      {/* <TableContainer elevation={3}>
         <Table sx={{ minWidth: 800 }} aria-label="proposals table">
           <TableHead>
             <TableRow>
@@ -302,7 +302,92 @@ const Proposals = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
+
+<Box>
+  <TableContainer component={Paper} sx={{ overflow: "visible" }}>
+    <Table sx={{ minWidth: 800 }} aria-label="proposals table">
+      <TableHead>
+        <TableRow>
+          {["Proposal Name", "Status", "Date", "Signed"].map((label, index) => (
+            <TableCell
+              key={index}
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "16px",
+                minWidth: 120,
+              }}
+            >
+              {label}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+
+      <TableBody>
+        {proposalsList.map((row) => (
+          <TableRow
+            key={row._id}
+            hover
+            sx={{
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f4f4f4",
+              },
+            }}
+          >
+            <TableCell>
+              <Tooltip title="View Details">
+                <Typography
+                  component="h2"
+                  variant="subtitle2"
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => handleOpenDialog(row)}
+                >
+                  {row.proposalname || "Untitled"}
+                </Typography>
+              </Tooltip>
+            </TableCell>
+
+            <TableCell>
+              <Chip
+                label={row.status || "Pending"}
+                color={
+                  row.status === "Signed"
+                    ? "success"
+                    : row.status === "Partially Signed"
+                    ? "error"
+                    : row.status === "Pending"
+                    ? "warning"
+                    : "default"
+                }
+                size="small"
+                sx={{ border: "none" }}
+              />
+            </TableCell>
+
+            <TableCell>
+              {new Date(row.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </TableCell>
+
+            <TableCell>
+              {row.signed ? (
+                <Chip label="Signed" color="primary" size="small" />
+              ) : (
+                <Chip label="Unsigned" variant="outlined" size="small" />
+              )}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+</Box>
 
       <ProposalDialog
         open={openDialog}

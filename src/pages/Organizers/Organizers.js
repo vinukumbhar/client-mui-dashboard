@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  TableContainer,
+  TableContainer,Paper
 } from "@mui/material";
 import OrganizerDialog from "./OrganizerDialog";
 const Organizers = () => {
@@ -76,7 +76,7 @@ const Organizers = () => {
         Organizers
       </Typography>
 
-      <TableContainer elevation={3}>
+      {/* <TableContainer elevation={3}>
         <Table sx={{ minWidth: 800 }} aria-label="proposals table">
           <TableHead>
             <TableRow>
@@ -142,7 +142,92 @@ const Organizers = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
+      <Box>
+  <TableContainer component={Paper} sx={{ overflow: "visible" }}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          {[
+            "Organizer Name",
+            "Seal",
+            "Status",
+            "Date"
+          ].map((label, index) => (
+            <TableCell
+              key={index}
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "16px",
+                minWidth: 120,
+              }}
+            >
+              {label}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+
+      <TableBody>
+        {organizersList.map((row) => (
+          <TableRow
+            key={row._id}
+            hover
+            sx={{
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f4f4f4",
+              },
+            }}
+          >
+            <TableCell>
+              <Tooltip title="View Details">
+                <Typography
+                  component="h2"
+                  variant="subtitle2"
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => handleOpenDialog(row)}
+                >
+                  {row.organizerName || "Untitled"}
+                </Typography>
+              </Tooltip>
+            </TableCell>
+
+            <TableCell>
+              {row.issealed === true && (
+                <Chip
+                  label="Sealed"
+                  color="success"
+                  size="small"
+                  sx={{ border: "none" }}
+                />
+              )}
+            </TableCell>
+
+            <TableCell>
+              <Chip
+                label={row.status || "Pending"}
+                color={row.status === "Completed" ? "success" : "default"}
+                size="small"
+                sx={{ border: "none" }}
+              />
+            </TableCell>
+
+            <TableCell>
+              {new Date(row.updatedAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+</Box>
+
       <OrganizerDialog
         open={openDialog}
         handleClose={handleCloseDialog}

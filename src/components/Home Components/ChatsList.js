@@ -4,31 +4,29 @@ import Paper from "@mui/material/Paper";
 import { Stack, Typography } from "@mui/material";
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-const ChatsList = ({accountId}) => {
+const ChatsList = ({ accountId }) => {
   const [chats, setChats] = useState([]);
-    const theme = useTheme();
+  const theme = useTheme();
 
- useEffect(() => {
-  const fetchUnreadChats = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1/chats/unread/${accountId}`
-      );
-      setChats(response.data.chats || []);
-      console.log("unread chat messages", response.data.chats);
-    } catch (error) {
-      console.error("Error fetching unread chats:", error);
+  useEffect(() => {
+    const fetchUnreadChats = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1/chats/unread/${accountId}`
+        );
+        setChats(response.data.chats || []);
+        console.log("unread chat messages", response.data.chats);
+      } catch (error) {
+        console.error("Error fetching unread chats:", error);
+      }
+    };
+
+    if (accountId) {
+      fetchUnreadChats();
     }
-  };
-
-  if (accountId) {
-    fetchUnreadChats();
-  }
-}, [accountId]);
-
-
+  }, [accountId]);
 
   const stripHtmlAndLimit = (html, wordLimit) => {
     if (!html) return "";
@@ -43,39 +41,40 @@ const ChatsList = ({accountId}) => {
     // Navigate to the chat update page with the chat ID
     // navigate(`/updatechat/${chatId}`);
     updatechatStatus(chatId)
-    .then(() => {
-      // Once the status is updated, navigate to the chat update page
-      navigate(`/updatechat/${chatId}`);
-    })
-    .catch((error) => {
-      console.error("Error updating chat status:", error);
-    });
+      .then(() => {
+        // Once the status is updated, navigate to the chat update page
+        navigate(`/updatechat/${chatId}`);
+      })
+      .catch((error) => {
+        console.error("Error updating chat status:", error);
+      });
   };
 
   const updatechatStatus = (chatId) => {
     return new Promise((resolve, reject) => {
       let data = JSON.stringify({
-        "chatstatus": true
+        chatstatus: true,
       });
-      
+
       let config = {
-        method: 'post',
+        method: "post",
         maxBodyLength: Infinity,
         url: `http://127.0.0.1/chats/accountchat/updatestatus/${chatId}`,
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+          "Content-Type": "application/json",
         },
-        data: data
+        data: data,
       };
 
-      axios.request(config)
+      axios
+        .request(config)
         .then((response) => {
           console.log("Status updated:", JSON.stringify(response.data));
-          resolve();  // Resolve the promise if successful
+          resolve(); // Resolve the promise if successful
         })
         .catch((error) => {
           console.error("Error updating chat status:", error);
-          reject(error);  // Reject the promise if there's an error
+          reject(error); // Reject the promise if there's an error
         });
     });
   };
@@ -128,27 +127,32 @@ const ChatsList = ({accountId}) => {
               </Stack>
             ))} */}
             {chats.map((chat) => {
-  const messageData = chat.latestMessage?._doc || {};
-  const sender = messageData.senderid?.username || "Unknown Sender";
- 
+              const messageData = chat.latestMessage?._doc || {};
+              const sender = messageData.senderid?.username || "Unknown Sender";
 
-  return (
-    <Stack key={chat._id} mb={1.5}>
-      <Paper sx={{ p: 2, cursor: "pointer" }} onClick={() => handleShowChat(chat._id)}>
-        <Typography variant="subtitle2" fontWeight="bold">
-          {chat.chatsubject}
-        </Typography>
-        <Stack direction="row" alignItems="flex-start" spacing={1}>
-          <SendIcon fontSize="small" sx={{ color: theme.palette.success.main, mt: "3px" }} />
-          <Typography variant="body2" color="text.secondary">
-            {sender} : {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
-          </Typography>
-        </Stack>
-      </Paper>
-    </Stack>
-  );
-})}
-
+              return (
+                <Stack key={chat._id} mb={1.5}>
+                  <Paper
+                    sx={{ p: 2, cursor: "pointer" }}
+                    onClick={() => handleShowChat(chat._id)}
+                  >
+                    <Typography variant="subtitle2" fontWeight="bold">
+                      {chat.chatsubject}
+                    </Typography>
+                    <Stack direction="row" alignItems="flex-start" spacing={1}>
+                      <SendIcon
+                        fontSize="small"
+                        sx={{ color: theme.palette.success.main, mt: "3px" }}
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {sender} :{" "}
+                        {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
+                      </Typography>
+                    </Stack>
+                  </Paper>
+                </Stack>
+              );
+            })}
           </Box>
         </Box>
       )}

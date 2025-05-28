@@ -80,13 +80,13 @@ const [accountId, setAccountId] = useState();
             </Typography>
           </Stack>
           <OrganizersList accountId={accountId}/>
-          <BillingList />
-          <DocumentsList />
+          <BillingList accountId={accountId}/>
+          {/* <DocumentsList /> */}
           <ChatsList accountId={accountId}/>
           <ProposalsList accountId={accountId}/>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <QuickLinks />
+          <QuickLinks accountId={accountId}/>
         </Grid>
       </Grid>
     </Box>

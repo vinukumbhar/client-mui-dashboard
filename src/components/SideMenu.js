@@ -163,6 +163,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from 'material-react-toastify';
 import MenuButton from './MenuButton';
+import Logo from "../Images/snplogo.png"
 const drawerWidth = 240;
 const collapsedWidth = 72;
 
@@ -283,16 +284,42 @@ export default function SideMenu() {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: collapsed ? 'center' : 'flex-end',
+          justifyContent: collapsed ? 'center' : 'space-between',
           alignItems: 'center',
           p: 1,
           mt: 'calc(var(--template-frame-height, 0px) + 4px)',
+        
         }}
       >
+        {!collapsed && (
+    <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
+      <img
+        src={Logo}// Replace with your logo path
+        alt="Company Logo"
+        style={{ height: 60 }} // Adjust height as needed
+      />
+    </Box>
+  )}
         <Tooltip title={collapsed ? "Expand" : "Collapse"} placement="right">
-          <IconButton onClick={toggleCollapse}>
-            {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
+          <Box
+      onClick={toggleCollapse}
+      sx={{
+        cursor: 'pointer',
+        backgroundColor: 'green',
+        // padding: '2px',
+        textAlign: 'center',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {collapsed ? (
+        <ChevronRightIcon sx={{ color: 'white', fontSize: '1.8rem' }} />
+      ) : (
+        <ChevronLeftIcon sx={{ color: 'white', fontSize: '1.8rem' }} />
+      )}
+    </Box>
         </Tooltip>
       </Box>
       <Divider />

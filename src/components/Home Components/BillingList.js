@@ -1,12 +1,50 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import {  Stack, Typography } from "@mui/material";
+import PaymentIcon from '@mui/icons-material/Payment';
+import { useNavigate } from "react-router-dom";
+const BillingList = ({ accountId }) => {
+  const theme = useTheme();
+    const navigate = useNavigate();
+  const [billingInvoices, setBiilingInvoices] = useState([])
+   const fetchInvoices = async () => {
+      try {
+        const url = `http://127.0.0.1/workflow/invoices/invoice/pending/invoicelistby/accountid/${accountId}`;
+  
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Failed to fetch invoices");
+        }
+        const data = await response.json();
+        console.log("invoice",data);
+        setBiilingInvoices(data.invoice);
+       
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+      }
+    };
+    useEffect(() => {
+      if (accountId) {
+        fetchInvoices();
+      }
+    }, [accountId]);
+console.log("billing", billingInvoices)
 
-const BillingList = () => {
+const handlePayInvoice = (invoice) => {
+  navigate("/payinvoice", {
+    state: {
+      selectedInvoices: [invoice],
+      accountName: invoice.account.accountName, // Replace with dynamic client/account name if needed
+    },
+  });
+};
   return (
     <>
-     <Stack
+    {billingInvoices.length > 0 && (
+       <Box>
+          <Stack
             sx={{
               p: 0,
               display: "flex",
@@ -21,33 +59,76 @@ const BillingList = () => {
               gutterBottom
               sx={{ fontWeight: "600" }}
             >
-              Billing
+              Billing ({billingInvoices.length})
             </Typography>
           </Stack>
           <Box mt={2}>
-            <Stack mb={1.5}>
-              <Paper sx={{ p: 3 }}>
-                <Typography
-                  variant="subtitle2"
-                  component="p"
-                  sx={{ flexGrow: 1 }}
+            {billingInvoices.map((invoice, index) => (
+              <Stack key={index} mb={1.5}>
+                {" "}
+                <Paper
+          onClick={() => handlePayInvoice(invoice)}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    transition: "all 0.3s",
+                    cursor: "pointer",
+                    "&:hover .sign-link": {
+                      opacity: 1,
+                      visibility: "visible",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    },
+                  }}
                 >
-                  Pay Invoice
-                </Typography>
-              </Paper>
-            </Stack>
-            <Stack mb={1.5}>
-              <Paper sx={{ p: 3 }}>
-                <Typography
-                  variant="subtitle2"
-                  component="p"
-                  sx={{ flexGrow: 1 }}
-                >
-                  Pay Invoice
-                </Typography>
-              </Paper>
-            </Stack>
+                  <Box
+                    display="flex" alignItems="center" gap={1}
+                  >
+                  <PaymentIcon fontSize="small" sx={{color: theme.palette.success.main,}}/>
+                  <Typography component="h2" variant="subtitle2" >
+                    Pay Invoice ${invoice.summary.total}
+                  </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary", cursor: "pointer" }}
+                      >
+                     # {invoice.invoicenumber}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      className="sign-link"
+                      color="primary"
+                      variant="subtitle2"
+                      component="p"
+                      fontWeight="600"
+                      sx={{
+                        fontSize: 14,
+                        opacity: 0,
+                        visibility: "hidden",
+                        transition: "all 0.3s",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                     Pay
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Stack>
+            ))}
           </Box>
+        </Box>
+    )}
 
     </>
   )

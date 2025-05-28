@@ -16,7 +16,7 @@ const OrganizersList = ({ accountId }) => {
         throw new Error("Failed to fetch organizerTemplatesData");
       }
       const data = await response.json();
-      console.log("organizer",data);
+      // console.log("organizer",data);
       setOrganizers(data.pendingOrganizers);
      
     } catch (error) {

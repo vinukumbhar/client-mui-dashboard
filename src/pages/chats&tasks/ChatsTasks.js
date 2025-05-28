@@ -52,7 +52,7 @@ const ChatsTasks = () => {
       });
   };
 
-  const CLEINT_CHAT_API = process.env.REACT_APP_CHAT_API;
+ 
   const [accountName, setAccountName] = useState();
   const [time, setTime] = useState();
   const [chatList, setChatList] = useState([]);
@@ -170,6 +170,7 @@ const ChatsTasks = () => {
             size="small"
             color="primary"
             fullWidth={isSmallScreen}
+            // onClick={handleNewChat}
           >
             New Chat
           </Button>
