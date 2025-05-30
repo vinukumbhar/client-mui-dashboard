@@ -2,12 +2,17 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import React from "react";
+import React,{useState} from "react";
 import { Divider, Stack, Typography } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import TelegramIcon from "@mui/icons-material/Telegram";
-const QuickLinks = ({accountId}) => {
+import NewChat from "../pages/chats&tasks/NewChat";
+const QuickLinks = ({accountId,loginUserId}) => {
+
+    const [open, setOpen] = useState(false);
+     const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
   return (
     <>
      <Paper sx={{ height: "auto" }}>
@@ -43,7 +48,7 @@ const QuickLinks = ({accountId}) => {
                 <Stack>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <TelegramIcon />
-                    <Typography component="h2" variant="subtitle2" gutterBottom>
+                    <Typography component="h2" variant="subtitle2" gutterBottom  onClick={handleOpen} sx={{cursor:'pointer'}}>
                       Chats
                     </Typography>
                   </Box>
@@ -159,6 +164,8 @@ const QuickLinks = ({accountId}) => {
               </Typography>
             </Stack>
           </Paper>
+
+           <NewChat open={open} close={handleClose}  accId={accountId} loginuserid={loginUserId} />
     </>
   )
 }

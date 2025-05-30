@@ -86,7 +86,7 @@ const [accountId, setAccountId] = useState();
           <ProposalsList accountId={accountId}/>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <QuickLinks accountId={accountId}/>
+          <QuickLinks accountId={accountId} loginUserId={loginUserId}/>
         </Grid>
       </Grid>
     </Box>

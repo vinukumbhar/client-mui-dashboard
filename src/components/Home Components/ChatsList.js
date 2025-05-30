@@ -14,10 +14,10 @@ const ChatsList = ({ accountId }) => {
     const fetchUnreadChats = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1/chats/unread/${accountId}`
+          `http://127.0.0.1/chats/unread/${accountId}/Admin`
         );
         setChats(response.data.chats || []);
-        console.log("unread chat messages", response.data.chats);
+        console.log("unread chat messages:", response.data.chats);
       } catch (error) {
         console.error("Error fetching unread chats:", error);
       }
@@ -37,50 +37,82 @@ const ChatsList = ({ accountId }) => {
   };
   const navigate = useNavigate();
 
-  const handleShowChat = (chatId) => {
-    // Navigate to the chat update page with the chat ID
-    // navigate(`/updatechat/${chatId}`);
-    updatechatStatus(chatId)
-      .then(() => {
-        // Once the status is updated, navigate to the chat update page
-        navigate(`/updatechat/${chatId}`);
-      })
-      .catch((error) => {
-        console.error("Error updating chat status:", error);
-      });
-  };
+  // const handleShowChat = (chatId) => {
+  //   // Navigate to the chat update page with the chat ID
+  //   navigate(`/updatechat/${chatId}`);
 
-  const updatechatStatus = (chatId) => {
-    return new Promise((resolve, reject) => {
-      let data = JSON.stringify({
-        chatstatus: true,
-      });
+  // };
 
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: `http://127.0.0.1/chats/accountchat/updatestatus/${chatId}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
+  const handleShowChat = async (chatId) => {
+    try {
+      // Mark as read
+      await axios.patch(
+        `http://127.0.0.1/chats/mark-all-read/${chatId}/accounts/${accountId}/Admin`
+      );
 
-      axios
-        .request(config)
-        .then((response) => {
-          console.log("Status updated:", JSON.stringify(response.data));
-          resolve(); // Resolve the promise if successful
-        })
-        .catch((error) => {
-          console.error("Error updating chat status:", error);
-          reject(error); // Reject the promise if there's an error
-        });
-    });
+      // Navigate to the chat
+      navigate(`/updatechat/${chatId}`);
+
+      // Update local state
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+    }
   };
 
   return (
     <>
+      {/* {chats.length > 0 && (
+        <Box>
+          <Stack
+            sx={{
+              p: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
+            }}
+          >
+            <Typography
+              component="h2"
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: "600" }}
+            >
+              Chats & Tasks ({chats.length})
+            </Typography>
+          </Stack>
+
+          <Box mt={2}>
+
+            {chats.map((chat) => {
+              const sender = chat.sender.username || "Unknown Sender";
+              const message = chat.message || "";
+
+              return (
+                <Stack key={chat._id} mb={1.5}>
+                  <Paper
+                    sx={{ p: 2, cursor: "pointer" }}
+                    onClick={() => handleShowChat(chat.chatId, chat.messageId)}
+                  >
+                    <Typography variant="subtitle2" fontWeight="bold">
+                      {chat.chatSubject}
+                    </Typography>
+                    <Stack direction="row" alignItems="flex-start" spacing={1}>
+                      <SendIcon
+                        fontSize="small"
+                        sx={{ color: theme.palette.success.main, mt: "3px" }}
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {sender} : {stripHtmlAndLimit(message, 15)}
+                      </Typography>
+                    </Stack>
+                  </Paper>
+                </Stack>
+              );
+            })}
+          </Box>
+        </Box>
+      )} */}
       {chats.length > 0 && (
         <Box>
           <Stack
@@ -103,41 +135,56 @@ const ChatsList = ({ accountId }) => {
           </Stack>
 
           <Box mt={2}>
-            {/* {chats.map((chat) => (
-              <Stack key={chat._id} mb={1.5}>
-                <Paper sx={{ p: 2 ,cursor:'pointer'}} onClick={() => handleShowChat(chat._id)}>
-                  <Typography variant="subtitle2" fontWeight="bold">
-                    {chat.chatsubject}
-                  </Typography>
-                  <Stack direction="row" alignItems="flex-start" spacing={1}>
-                    <SendIcon
-                      fontSize="small"
-                      sx={{ color: "#4caf50", mt: "3px" }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>
-                        
-                      {chat.latestMessage?.fromwhome?.username}
-                        
-                      </strong>{" "}
-                      {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
-                    </Typography>
-                  </Stack>
-                </Paper>
-              </Stack>
-            ))} */}
             {chats.map((chat) => {
-              const messageData = chat.latestMessage?._doc || {};
-              const sender = messageData.senderid?.username || "Unknown Sender";
+              // Get the most recent message (last in the array since they're sorted)
+              const mostRecentMessage = chat.messages[chat.messages.length - 1];
+              const sender =
+                mostRecentMessage.sender.username || "Unknown Sender";
+              const message = mostRecentMessage.message || "";
 
               return (
-                <Stack key={chat._id} mb={1.5}>
+                <Stack key={chat.chatId} mb={1.5}>
                   <Paper
-                    sx={{ p: 2, cursor: "pointer" }}
-                    onClick={() => handleShowChat(chat._id)}
+                    sx={{
+                      p: 2,
+                      borderRadius: 2,
+                      boxShadow: 1,
+                      transition: "all 0.3s",
+                      cursor: "pointer",
+                      "&:hover .sign-link": {
+                        opacity: 1,
+                        visibility: "visible",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                      },
+                      position: "relative",
+                    }}
+                    onClick={() => handleShowChat(chat.chatId)}
                   >
+                    {/* Show unread count badge if there are multiple messages */}
+                    {chat.unreadCount > 1 && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          backgroundColor: theme.palette.success.main,
+                          color: "white",
+                          borderRadius: "50%",
+                          width: 20,
+                          height: 20,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        {chat.unreadCount}
+                      </Box>
+                    )}
+
                     <Typography variant="subtitle2" fontWeight="bold">
-                      {chat.chatsubject}
+                      {chat.chatSubject}
                     </Typography>
                     <Stack direction="row" alignItems="flex-start" spacing={1}>
                       <SendIcon
@@ -145,8 +192,7 @@ const ChatsList = ({ accountId }) => {
                         sx={{ color: theme.palette.success.main, mt: "3px" }}
                       />
                       <Typography variant="body2" color="text.secondary">
-                        {sender} :{" "}
-                        {stripHtmlAndLimit(chat.latestMessage?.message, 15)}
+                        {sender} : {stripHtmlAndLimit(message, 15)}
                       </Typography>
                     </Stack>
                   </Paper>
