@@ -155,10 +155,10 @@
 
 // export default Proposals;
 
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Box,
-  Stack,
+
   Table,
   TableHead,
   TableBody,

@@ -27,7 +27,7 @@ import ColorModeSelect from '../shared-theme/ColorModeSelect';
 
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-
+import { Link as RouterLink } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -125,64 +125,7 @@ const setVal = (e) => {
 };
 
 
-// const handleSubmit = async (e) => {
-//   console.log(inpval)
-//   e.preventDefault();
-//   const { email, password } = inpval;
-//   const expiryTime = 8 * 60 * 60; 
-//   if (!email) {
-//       toast.error("Email is required!");
-//       return;
-//   } else if (!email.includes("@")) {
-//       toast.error("Invalid email format!");
-//       return;
-//   }
 
-//   if (!password) {
-//       toast.error("Password is required!");
-//       return;
-//   } else if (password.length < 6) {
-//       toast.error("Password must be at least 6 characters long!");
-//       return;
-//   }
-
-  
-//   try {
-
-//       const url = `http://127.0.0.1/common/clientlogin/generatetokenforclient`;
-//       const data = await fetch(url, {
-//           method: "POST",
-//           headers: {
-//               "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({
-//               email,
-//               password,
-//               expiryTime,
-//           }),
-//       });
-     
-//       const res = await data.json();
-//       console.log(res);
-
-//       if (res.status === 200) {
-//           localStorage.setItem("clientdatatoken", res.result.token);
-//           Cookies.set("clientuserToken", res.result.token);
-//           navigate("/home");
-//           toast.success("Login Successfully")
-//           setInpval({ ...inpval, email: "", password: "" });
-
-//           Cookies.set("clientuserToken", res.result.token);
-//       } else if (res.status === 400) {
-//           toast.error("Invalid email or password!");
-//       } else {
-//           toast.error("An error occurred. Please try again.");
-//       }
-//   } catch (error) {
-//       // console.error("Error:", error);
-//       toast.error("An error occurred. Please try again.");
-//   }
-// };
 
   
 const handleSubmit = async (e) => {
@@ -209,7 +152,7 @@ const handleSubmit = async (e) => {
 
   try {
     // Check user status via GET (encode email for URL safety)
-    const encodedEmail = encodeURIComponent(email);
+    // const encodedEmail = encodeURIComponent(email);
     const checkUserUrl = `http://127.0.0.1/common/user/email/getuserbyemail/${email}`;
     
     const checkUserResponse = await fetch(checkUserUrl, {
@@ -390,7 +333,19 @@ const handleSubmit = async (e) => {
               Forgot your password?
             </Link>
           </Box>
-         
+            <Divider>or</Divider>
+        <Typography sx={{ textAlign: 'center' }}>
+  Don&apos;t have an account?{' '}
+  <Link
+    component={RouterLink}
+    to="/signup"
+    variant="body2"
+    sx={{ alignSelf: 'center' }}
+  >
+    Sign up
+  </Link>
+</Typography>
+
         </Card>
       </SignInContainer>
     </AppTheme>

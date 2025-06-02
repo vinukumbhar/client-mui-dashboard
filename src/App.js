@@ -10,13 +10,14 @@ import Proposals from "./pages/proposals/Proposals";
 import UpdateChat from "./pages/chats&tasks/UpdateChat";
 import Invoices from "./pages/Billing/Invoices";
 import PayInvoice from "./pages/Billing/PayInvoice";
-
+import Signup from "./login-signup/Signup";
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<SignIn />} />
+           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Dashboard />}>
             <Route path="/home" element={<Home />} />
             <Route path="/document" element={<Document />} />
