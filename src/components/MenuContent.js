@@ -136,12 +136,14 @@ export default function MenuContent({ collapsed }) {
               minHeight: 48,
               justifyContent: collapsed ? 'center' : 'initial',
               px: 2.5,
+              // color: 'text.menu',
+    // '&:hover': { backgroundColor: 'action.hover' },
             }}
           >
             {IconComponent && (
               <ListItemIcon 
                 sx={{ 
-                  color: "text.menu",
+                  // color: "text.menu",
                   minWidth: 0,
                   mr: collapsed ? 'auto' : 3,
                   justifyContent: 'center',
@@ -154,7 +156,7 @@ export default function MenuContent({ collapsed }) {
               <ListItemText 
                 primary={item.label} 
                 sx={{ 
-                  color: "text.menu",
+                  // color: "text.menu",
                   opacity: collapsed ? 0 : 1,
                   transition: 'opacity 0.2s',
                 }} 

@@ -72,6 +72,7 @@ const handlePayInvoice = (invoice) => {
                     p: 2,
                     borderRadius: 2,
                     boxShadow: 1,
+                   
                     transition: "all 0.3s",
                     cursor: "pointer",
                     "&:hover .sign-link": {

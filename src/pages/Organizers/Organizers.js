@@ -198,19 +198,38 @@ const Organizers = () => {
               {row.issealed === true && (
                 <Chip
                   label="Sealed"
-                  color="success"
+                  // color="info"
+                   color="#000"
                   size="small"
-                  sx={{ border: "none" }}
+                  sx={{ 
+      border: "none",
+      ...(row.issealed === "true" && {
+        backgroundColor: "#0d6efd",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      }),
+     
+    }}
                 />
               )}
             </TableCell>
 
             <TableCell>
               <Chip
-                label={row.status || "Pending"}
-                color={row.status === "Completed" ? "success" : "default"}
+                label={row.status}
+                color="#000"
+                // color={row.status === "Completed" ? "success" : "warning"}
                 size="small"
-                sx={{ border: "none" }}
+             sx={{ 
+      border: "none",
+      ...(row.status === "Pending" && {
+        backgroundColor: "#ffc107",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      }),
+      ...(row.status === "Completed" && {
+        backgroundColor: "#198754",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      })
+    }}
               />
             </TableCell>
 

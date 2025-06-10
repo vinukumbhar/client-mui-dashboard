@@ -36,7 +36,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
   }, [loginuser]);
   
 
-  
+   const [profilePicture, setProfilePicture] = useState("")
   const fetchUserData = async (id) => {
  
     const myHeaders = new Headers();
@@ -56,6 +56,15 @@ function SideMenuMobile({ open, toggleDrawer }) {
       
      
       setUsername(result.username);
+      if (result.profilePicture) {
+      // Remove the 'uploads/' prefix since your static route already handles it
+      const imagePath = result.profilePicture.replace('uploads/', '');
+      const fullImageUrl = `http://127.0.0.1/profilepicture/${imagePath}`;
+      setProfilePicture(fullImageUrl);
+      console.log("image url",fullImageUrl)
+    } else {
+      setProfilePicture(null);
+    }
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -119,6 +128,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
             <Avatar
               sizes="small"
               alt="Profile"
+               src={profilePicture}
               // src="/static/images/avatar/7.jpg"
               sx={{ width: 24, height: 24 }}
             />

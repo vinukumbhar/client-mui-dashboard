@@ -81,7 +81,7 @@ const OrganizersList = ({ accountId }) => {
                     },
                   }}
                 >
-                  <Typography component="h2" variant="subtitle2" gutterBottom>
+                  <Typography component="h2" variant="subtitle2" gutterBottom >
                     Complete Organizer
                   </Typography>
                   <Box

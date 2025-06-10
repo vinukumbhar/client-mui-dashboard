@@ -486,6 +486,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
           <Box mt={2} mb={2}>
             <LinearProgress
               variant="determinate"
+              color="success" 
               value={((activeStep + 1) / totalSteps) * 100}
             />
           </Box>

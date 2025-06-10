@@ -54,6 +54,7 @@ const [accountId, setAccountId] = useState();
   };
   console.log("accountid", accountId)
   return (
+    
     <Box
       sx={{
         width: "100%",
@@ -69,6 +70,20 @@ const [accountId, setAccountId] = useState();
           size={{ xs: 12, md: 8 }}
           // sx={{ height: "88vh", overflowY: "auto" }}
         >
+          <Paper sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    boxShadow: 1,
+                  //  marginBottom:2,
+                    transition: "all 0.3s",
+                    cursor: "pointer",
+                    "&:hover .sign-link": {
+                      opacity: 1,
+                      visibility: "visible",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    },
+                  }}>
           <Stack sx={{ p: 0 }}>
             <Typography
               variant="h6"
@@ -84,6 +99,7 @@ const [accountId, setAccountId] = useState();
           {/* <DocumentsList /> */}
           <ChatsList accountId={accountId}/>
           <ProposalsList accountId={accountId}/>
+          </Paper>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <QuickLinks accountId={accountId} loginUserId={loginUserId}/>

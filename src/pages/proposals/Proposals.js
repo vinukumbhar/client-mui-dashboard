@@ -350,9 +350,9 @@ const Proposals = () => {
               </Tooltip>
             </TableCell>
 
-            <TableCell>
+            {/* <TableCell>
               <Chip
-                label={row.status || "Pending"}
+                label={row.status}
                 color={
                   row.status === "Signed"
                     ? "success"
@@ -365,8 +365,38 @@ const Proposals = () => {
                 size="small"
                 sx={{ border: "none" }}
               />
-            </TableCell>
-
+            </TableCell> */}
+<TableCell>
+  <Chip
+    label={row.status}
+    // color={
+    //   row.status === "Signed"
+    //     ? "success"
+    //     : row.status === "Partially Signed"
+    //     ? "error"
+    //     : row.status === "Pending"
+    //     ? "warning"
+    //     : "default"
+    // }
+         color="#000"
+    sx={{ 
+      border: "none",
+      ...(row.status === "Pending" && {
+        backgroundColor: "#ffc107",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      }),
+       ...(row.status === "Signed" && {
+        backgroundColor: "#198754",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      }),
+       ...(row.status === "Partially Signed" && {
+        backgroundColor: "#dc3545",
+        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+      })
+    }}
+    size="small"
+  />
+</TableCell>
             <TableCell>
               {new Date(row.createdAt).toLocaleDateString("en-US", {
                 month: "short",

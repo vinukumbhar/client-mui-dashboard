@@ -1,7 +1,7 @@
 // // src/components/UploadDrawer.js
 // import React, { useEffect, useState } from "react";
 // import {
-//   Box,
+//   Stack,
 //   Typography,
 //   Drawer,
 //   IconButton,
@@ -57,8 +57,8 @@
 
 //       if (item.folder) {
 //         return (
-//           <Box key={item.id} style={{ marginLeft: "20px" }}>
-//             <Box
+//           <Stack key={item.id} style={{ marginLeft: "20px" }}>
+//             <Stack
 //               style={{
 //                 cursor: "pointer",
 //                 display: "flex",
@@ -72,17 +72,17 @@
 //             >
 //               {item.isOpen ? "📂" : "📁"}{" "}
 //               <strong style={{ marginLeft: "5px" }}>{item.folder}</strong>
-//             </Box>
+//             </Stack>
 //             {item.isOpen && item.contents.length > 0 && (
-//               <Box>{renderContents(item.contents, currentPath)}</Box>
+//               <Stack>{renderContents(item.contents, currentPath)}</Stack>
 //             )}
-//           </Box>
+//           </Stack>
 //         );
 //       } else if (item.file) {
 //         return (
-//           <Box key={item.id} style={{ marginLeft: "40px" }}>
+//           <Stack key={item.id} style={{ marginLeft: "40px" }}>
 //             📄 {item.file}
-//           </Box>
+//           </Stack>
 //         );
 //       }
 //       return null;
@@ -130,8 +130,8 @@
 
 //   return (
 // <Drawer anchor="right" open={open} onClose={onClose}>
-//   <Box sx={{ width: 600, padding: 2 }}>
-//     <Box
+//   <Stack sx={{ width: 600, padding: 2 }}>
+//     <Stack
 //       sx={{
 //         display: "flex",
 //         justifyContent: "space-between",
@@ -142,7 +142,7 @@
 //       <IconButton onClick={onClose}>
 //         <MdClose />
 //       </IconButton>
-//     </Box>
+//     </Stack>
 //     <TextField
 //       fullWidth
 //       size="small"
@@ -161,14 +161,14 @@
 //     {loading ? (
 //       <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
 //     ) : folderStructure.length > 0 ? (
-//       <Box>{renderContents(folderStructure)}</Box>
+//       <Stack>{renderContents(folderStructure)}</Stack>
 //     ) : (
 //       <Typography variant="body2" sx={{ mt: 2, color: "gray" }}>
 //         No folders found
 //       </Typography>
 //     )}
 
-//   </Box>
+//   </Stack>
 // </Drawer>
 //   );
 // };
@@ -177,20 +177,22 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Box,
+  Stack,
   Typography,
   Drawer,
   IconButton,
   CircularProgress,
   TextField,
   Button,
+  useMediaQuery,
+  useTheme,
+  Box,
 } from "@mui/material";
+import { drawerClasses } from "@mui/material/Drawer";
 import { MdClose } from "react-icons/md";
 import axios from "axios";
 import FileExplorer from "./FileExplorer";
-const CreateFolder = ({ open, onClose,accountId }) => {
-
-
+const CreateFolder = ({ open, onClose, accountId }) => {
   useEffect(() => {
     console.log(accountId);
   }, [accountId]);
@@ -202,74 +204,45 @@ const CreateFolder = ({ open, onClose,accountId }) => {
   const [newFolderName, setNewFolderName] = useState("");
   const [newFolderPath, setNewFolderPath] = useState("");
 
- 
   const [destinationPath, setDestinationPath] = useState("");
-  // const handleCreateFolder = async () => {
-  //   try {
-  //     const response = await fetch(`http://127.0.0.1:8000/createFolderinfirm?path=uploads/FolderTemplates/${templateId}/${newFolderPath}&foldername=${newFolderName}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify({
-  //         permissions: {
-  //           canView: true,
-  //           canDownload: true,
-  //           canDelete: false,
-  //           canUpdate: false
-  //         }
-  //       })
-  //     });
-  
-  //     const data = await response.json();
-  
-  //     if (response.ok) {
-  //       console.log("Folder created:", data);
-  //       alert("Folder created successfully!");
-  //     } else {
-  //       console.error("Failed to create folder:", data);
-  //       alert("Error: " + data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     alert("Something went wrong!");
-  //   }
-  // };
+
   const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
   const handleCreateFolder = async () => {
     if (!newFolderName || !destinationPath) {
       alert("Please enter a folder name and select a destination.");
       return;
     }
-  
+
     const fullPath = `uploads/AccountId/${accountId}/${destinationPath}`;
-    const url = `${DOCS_MANAGMENTS}/firmDocs/createFolderinfirm?path=${encodeURIComponent(fullPath)}&foldername=${encodeURIComponent(newFolderName)}`;
-  
+    const url = `${DOCS_MANAGMENTS}/firmDocs/createFolderinfirm?path=${encodeURIComponent(
+      fullPath
+    )}&foldername=${encodeURIComponent(newFolderName)}`;
+
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          accountId:accountId,
+          accountId: accountId,
           permissions: {
             canView: true,
             canDownload: true,
             canDelete: false,
-            canUpdate: false
-          }
-        })
+            canUpdate: false,
+          },
+        }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         console.log("✅ Folder created:", data);
         alert("Folder created successfully!");
         setNewFolderName(""); // clear input
-        onClose()
-        
+        onClose();
+
         // Optional: refresh folder list
       } else {
         console.error("❌ Failed to create folder:", data);
@@ -283,61 +256,106 @@ const CreateFolder = ({ open, onClose,accountId }) => {
   const [data, setData] = useState({ folder: "", contents: [] });
   const [selectedPath, setSelectedPath] = useState("");
 
- 
   // const [selectedPath, setSelectedPath] = useState("");
 
-const handlePathSelect = (path) => {
-  console.log("Selected path:", path); // for debugging
-  setSelectedPath(path);
-  setDestinationPath(path); 
-};
- 
+  const handlePathSelect = (path) => {
+    console.log("Selected path:", path); // for debugging
+    setSelectedPath(path);
+    setDestinationPath(path);
+  };
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  // Determine drawer width based on screen size
+  const getDrawerWidth = () => {
+    if (isMobile) return "100vw";
+    if (isTablet) return "70vw";
+    return "40vw";
+  };
 
   return (
-    <Box>
-      <Drawer anchor="right" open={open} onClose={onClose}>
-        <Box
+    <Stack>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={onClose}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          [`& .${drawerClasses.paper}`]: {
+            width: getDrawerWidth(),
+            backgroundImage: "none",
+            backgroundColor: "background.paper",
+          },
+        }}
+      >
+        <Stack
           sx={{
-            backgroundColor: "#fff",
-            borderRadius: "8px",
-
-            padding: 2,
-            width: 600,
-            fontFamily:
-              "'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif",
+            width: "100%",
+            height: "100%",
+            overflow: "auto",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+          <Stack
+            direction="row"
+            sx={{ p: 2, pb: 0, gap: 1, alignItems: "center" }}
           >
-            <Typography variant="h6">Create folder</Typography>
-            <IconButton onClick={onClose}>
-              <MdClose />
-            </IconButton>
-          </Box>
-          <TextField
-            fullWidth
-            size="small"
-            variant="outlined"
-            placeholder="Folder Name"
-            value={newFolderName}
-            onChange={(e) => setNewFolderName(e.target.value)}
-          />
-          <Button variant="contained" sx={{ mt: 2 }}  onClick={handleCreateFolder}
-  disabled={!newFolderName || !destinationPath}>
-            Create Folder
-          </Button>
+            <Stack
+              direction="row"
+              sx={{
+                gap: 1,
+                alignItems: "center",
+                flexGrow: 1,
+                p: 1.5,
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography component="p" variant="h6">
+                Create Folder
+              </Typography>
+              <IconButton onClick={onClose}>
+                <MdClose />
+              </IconButton>
+            </Stack>
+          </Stack>
 
-          <Box sx={{ maxHeight: "500px", overflowY: "auto" }}>
-          <FileExplorer onPathSelect={handlePathSelect} accountId={accountId}/>
+          <Box sx={{ p: isMobile ? 2 : 3, flex: 1, overflow: "auto" }}>
+            <Stack>
+              <Typography
+                                  variant="subtitle2"
+                                  component="p"
+                                  gutterBottom
+                                  sx={{ fontWeight: "550" }}
+                                >Folder Name</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder="Folder Name"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                fullWidth={isMobile}
+                size={isMobile ? "large" : "medium"}
+                onClick={handleCreateFolder}
+                sx={{mt:3}}
+              >
+                Create Folder
+              </Button>
+            </Stack>
+             <Stack sx={{ mt: 3 }}>
+            <FileExplorer
+              onPathSelect={handlePathSelect}
+              accountId={accountId}
+            />
+          </Stack>
           </Box>
-        </Box>
+
+         
+        </Stack>
       </Drawer>
-    </Box>
+    </Stack>
   );
 };
 

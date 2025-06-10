@@ -14,6 +14,7 @@ import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
 import AddIcon from "@mui/icons-material/Add";
 import SecondSidebar from "./SecondMobileSidebar";
 import ThirdSidebar from "./ThirdSidebarMobile"
+import NavbarBreadcrumbs from "./NavbarBreadcrumbs";
 const Toolbar = styled(MuiToolbar)({
   width: "100%",
   padding: "12px",
@@ -76,32 +77,29 @@ const handleMenuItemClick = (itemText) => {
             spacing={1}
             sx={{ justifyContent: "center", mr: "auto" }}
           >
-            <CustomIcon />
+            {/* <CustomIcon />
             <Typography
               variant="h4"
               component="h1"
               sx={{ color: "text.primary" }}
             >
               Dashboard
-            </Typography>
+            </Typography> */}
+            <NavbarBreadcrumbs/>
           </Stack>
           <ColorModeIconDropdown />
           <MenuButton aria-label="menu" onClick={toggleDrawer(true)}>
             <MenuRoundedIcon />
           </MenuButton>
-          <MenuButton aria-label="menu" onClick={toggleNewDrawer(true)}>
+          {/* <MenuButton aria-label="menu" onClick={toggleNewDrawer(true)}>
             <AddIcon />
-          </MenuButton>
+          </MenuButton> */}
           <SecondSidebar
             open={openNewDrawer}
             toggleDrawer={toggleNewDrawer}
             onMenuItemClick={handleMenuItemClick}
           />
-          <ThirdSidebar
-            open={!!activeMenuItem}
-            toggleDrawer={() => setActiveMenuItem(null)}
-            title={activeMenuItem}
-          />
+          
           <SideMenuMobile open={open} toggleDrawer={toggleDrawer} />
         </Stack>
       </Toolbar>

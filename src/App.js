@@ -11,6 +11,7 @@ import UpdateChat from "./pages/chats&tasks/UpdateChat";
 import Invoices from "./pages/Billing/Invoices";
 import PayInvoice from "./pages/Billing/PayInvoice";
 import Signup from "./login-signup/Signup";
+import Settings from "./pages/Settings"
 const App = () => {
   return (
     <>
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/billing" element={<Invoices />} />
             <Route path="/payinvoice" element={<PayInvoice/>}/>
             <Route path="/proposalsels" element={<Proposals />} />
+            <Route path="/settings" element={<Settings/>}/>
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Route>
         </Routes>
