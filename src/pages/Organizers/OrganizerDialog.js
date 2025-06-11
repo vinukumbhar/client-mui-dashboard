@@ -25,6 +25,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { toast } from "material-react-toastify";
 import dayjs from "dayjs";
 const OrganizerDialog = ({ open, handleClose, organizer }) => {
+    const ORGANIZER_API = process.env.REACT_APP_ORGANIZER_TEMP_URL
   const sections = organizer?.sections; // Assigned const here
   console.log("organizer", organizer);
   const [selectedDropdownValues, setSelectedDropdownValues] = useState({});
@@ -267,7 +268,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
         redirect: "follow",
       };
       console.log("raw", raw);
-      const url = `http://127.0.0.1/workflow/orgaccwise/organizeraccountwise/${organizer._id}`;
+      const url = `${ORGANIZER_API}/workflow/orgaccwise/organizeraccountwise/${organizer._id}`;
       const response = await fetch(url, requestOptions);
       const result = await response.json();
 

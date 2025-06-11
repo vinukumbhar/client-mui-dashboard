@@ -175,6 +175,8 @@ import axios from "axios";
 import ProposalDialog from "../proposals/ProposalDialog";
 
 const Proposals = () => {
+  const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_URL
+    const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const { logindata } = useContext(LoginContext);
   const [loginuserid, setLoginUserId] = useState("");
   const [proposalsList, setProposalsList] = useState([]);
@@ -192,7 +194,7 @@ const Proposals = () => {
   const fetchAccountId = (id) => {
     axios
       .get(
-        `http://127.0.0.1/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
+        `${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
       )
       .then((response) => {
         const accountId = response.data.accounts[0]._id;
@@ -203,7 +205,7 @@ const Proposals = () => {
 
   const fetchPrprosalsAllData = async (accId) => {
     try {
-      const url = `http://127.0.0.1/proposalandels/proposalaccountwise/proposalbyaccount/${accId}`;
+      const url = `${PROPOSAL_API}/proposalandels/proposalaccountwise/proposalbyaccount/${accId}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch proposals");
       const result = await response.json();

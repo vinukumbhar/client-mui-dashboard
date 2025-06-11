@@ -21,6 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { LoginContext } from "../../context/Context";
 import axios from "axios";
 const UpdateChat = () => {
+   const CHAT_API = process.env.REACT_APP_CHAT_API;
   const { logindata } = useContext(LoginContext);
   console.log("login data", logindata);
   const [loginUserId, setLoginUserId] = useState();
@@ -47,7 +48,7 @@ const UpdateChat = () => {
 
   const getsChatDetails = async () => {
     try {
-      const url = `http://127.0.0.1/chats/chatsaccountwise/`;
+      const url = `${CHAT_API}/chats/chatsaccountwise/`;
       const response = await fetch(url + _id);
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -103,7 +104,7 @@ const UpdateChat = () => {
     };
 
     fetch(
-      `http://127.0.0.1/chats/chatsaccountwise/updateTaskCheckedStatus`,
+      `${CHAT_API}/chats/chatsaccountwise/updateTaskCheckedStatus`,
       requestOptions
     )
       .then((response) => response.json())
@@ -300,7 +301,7 @@ const UpdateChat = () => {
       newDescriptions: [newDescription],
     });
 
-    fetch(`http://127.0.0.1/chats/chatsaccountwise/chatupdatemessage/${_id}`, {
+    fetch(`${CHAT_API}/chats/chatsaccountwise/chatupdatemessage/${_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -328,7 +329,7 @@ const UpdateChat = () => {
       let config = {
         method: "PATCH",
         maxBodyLength: Infinity,
-        url: `http://127.0.0.1/chats/chatsaccountwise/${_id}`,
+        url: `${CHAT_API}/chats/chatsaccountwise/${_id}`,
         headers: {
           "Content-Type": "application/json",
         },

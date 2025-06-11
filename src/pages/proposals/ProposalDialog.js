@@ -189,6 +189,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 const ProposalDialog = ({ open, handleClose, proposal }) => {
+  const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_URL
     // console.log("proposals", proposal)
   const [selectedSection, setSelectedSection] = useState(null);
   const sectionRefs = useRef({});

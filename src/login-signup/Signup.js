@@ -55,7 +55,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const ClientSignUp = (props) => {
-  const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const CLIENT_DOCS = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
   const SEVER_PORT = process.env.REACT_APP_SERVER_URI;
   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
@@ -156,7 +156,7 @@ const ClientSignUp = (props) => {
     try {
       // Check if user exists
       const userCheck = await fetch(
-        `http://127.0.0.1/common/user/email/getuserbyemail/${email}`,
+        `${LOGIN_API}/common/user/email/getuserbyemail/${email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -173,7 +173,7 @@ const ClientSignUp = (props) => {
 
       // Send OTP
       const otpResponse = await axios.post(
-        `http://127.0.0.1/clientsotp/clientrequest-otp/`,
+        `${LOGIN_API}/clientsotp/clientrequest-otp/`,
         {
           email: email,
         }
@@ -241,7 +241,7 @@ const ClientSignUp = (props) => {
     try {
       // Verify OTP
       const otpVerify = await axios.post(
-        `http://127.0.0.1/clientsotp/verifyclient-otp/`,
+        `${LOGIN_API}/clientsotp/verifyclient-otp/`,
         {
           email: formData.email,
           otp: otp,
@@ -265,7 +265,7 @@ const ClientSignUp = (props) => {
     try {
       // Register client
       const clientResponse = await fetch(
-        `http://127.0.0.1/admin/clientsignup/`,
+        `${LOGIN_API}/admin/clientsignup/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -296,7 +296,7 @@ const ClientSignUp = (props) => {
   const createUserAccount = async (clientId) => {
     try {
       // Create user
-      const userResponse = await fetch(`http://127.0.0.1/common/login/signup`, {
+      const userResponse = await fetch(`${LOGIN_API}/common/login/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -310,7 +310,7 @@ const ClientSignUp = (props) => {
       const userResult = await userResponse.json();
 
       // Update client with user ID
-      await fetch(`http://127.0.0.1/admin/clientsignup/${clientId}`, {
+      await fetch(`${LOGIN_API}/admin/clientsignup/${clientId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userid: userResult._id }),
@@ -331,7 +331,7 @@ const ClientSignUp = (props) => {
     try {
       // Create account
       const accountResponse = await fetch(
-        `http://127.0.0.1/accounts/accountdetails`,
+        `${ACCOUNT_API}/accounts/accountdetails`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -347,7 +347,7 @@ const ClientSignUp = (props) => {
 
       // Update account with user ID
       await fetch(
-        `http://127.0.0.1/accounts/accountdetails/${accountResult.newAccount._id}`,
+        `${ACCOUNT_API}/accounts/accountdetails/${accountResult.newAccount._id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -365,7 +365,7 @@ const ClientSignUp = (props) => {
 
   const addFolderTemplate = async (accountId) => {
     try {
-      const response = await fetch(`http://127.0.0.1/clientdocs/clients`, {
+      const response = await fetch(`${CLIENT_DOCS}/clientdocs/clients`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ accountId }),

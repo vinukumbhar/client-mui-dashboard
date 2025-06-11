@@ -17,6 +17,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "material-react-toastify";
 const PayInvoice = () => {
+  const INVOICE_API = process.env.REACT_APP_INVOICES_URL;
       const accountHolderTypeOptions = [
     { label: "Individual", value: "individual" },
     { label: "Business", value: "business" },
@@ -102,7 +103,7 @@ const handleConfirmPayment = async () => {
     const updatePromises = selectedInvoices.map((invoice) => {
       const newPaidAmount = (invoice.paidAmount || 0) + invoice.summary.total;
 
-      return fetch(`http://127.0.0.1/workflow/invoices/invoice/${invoice._id}`, {
+      return fetch(`${INVOICE_API}/workflow/invoices/invoice/${invoice._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

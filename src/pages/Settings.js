@@ -24,11 +24,11 @@ const UserProfile = () => {
 //   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1/common/user/${loginUserId}`, {
+        const response = await axios.get(`${LOGIN_API}/common/user/${loginUserId}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

@@ -15,6 +15,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../context/Context";
 import { useNavigate } from "react-router-dom";
 const Invoices = () => {
+  const INVOICE_API = process.env.REACT_APP_INVOICES_URL;
+    const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const navigate = useNavigate();
   const { logindata } = useContext(LoginContext);
   const [loginuserid, setLoginUserId] = useState("");
@@ -41,7 +43,7 @@ const Invoices = () => {
   const fetchAccountId = (id) => {
     axios
       .get(
-        `http://127.0.0.1/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
+        `${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
       )
       .then((response) => {
         const accountId = response.data.accounts[0]._id;
@@ -52,7 +54,7 @@ const Invoices = () => {
   };
   const fetchidwiseData = async (accountId) => {
     try {
-      const url = `http://127.0.0.1/workflow/invoices/invoice/invoicelistby/accountid/${accountId}`;
+      const url = `${INVOICE_API}/workflow/invoices/invoice/invoicelistby/accountid/${accountId}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch task templates");

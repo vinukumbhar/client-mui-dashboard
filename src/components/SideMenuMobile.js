@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from 'material-react-toastify';
 function SideMenuMobile({ open, toggleDrawer }) {
-
+ const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const { logindata, setLoginData } = useContext(LoginContext);
   const [loginuser, setLoginUser] = useState("");
   // const [userData, setUserData] = useState("");
@@ -47,7 +47,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
       redirect: "follow",
     };
     
-    const url = `http://127.0.0.1/common/user/${id}`;
+    const url = `${LOGIN_API}/common/user/${id}`;
     
     try {
       const response = await fetch(url, requestOptions);
@@ -59,7 +59,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
       if (result.profilePicture) {
       // Remove the 'uploads/' prefix since your static route already handles it
       const imagePath = result.profilePicture.replace('uploads/', '');
-      const fullImageUrl = `http://127.0.0.1/profilepicture/${imagePath}`;
+      const fullImageUrl = `${LOGIN_API}/profilepicture/${imagePath}`;
       setProfilePicture(fullImageUrl);
       console.log("image url",fullImageUrl)
     } else {
@@ -74,7 +74,7 @@ function SideMenuMobile({ open, toggleDrawer }) {
   const navigate = useNavigate();
   const logoutuser = async () => {
     let token = localStorage.getItem("clientdatatoken");
-    const url = 'http://127.0.0.1/common/clientlogin/logout/';
+    const url = `${LOGIN_API}/common/clientlogin/logout/`;
 
     const requestOptions = {
         method: "POST",

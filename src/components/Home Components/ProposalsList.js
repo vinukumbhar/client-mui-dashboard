@@ -12,13 +12,14 @@ import DescriptionIcon from "@mui/icons-material/Description";
 
 import ProposalDialog from "../../pages/proposals/ProposalDialog"; 
 const ProposalsList = ({accountId}) => {
+  const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_URL
   const [proposals, setProposals] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
 console.log("vhjs", accountId)
   const fetchProposalsAllData = async () => {
     try {
-      const url = `http://127.0.0.1/proposalandels/proposals/pending/${accountId}`;
+      const url = `${PROPOSAL_API}/proposalandels/proposals/pending/${accountId}`;
 
       const response = await fetch(url);
       if (!response.ok) {

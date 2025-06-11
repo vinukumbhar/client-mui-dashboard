@@ -15,6 +15,7 @@ import ProposalsList from "../components/Home Components/ProposalsList"
 
 import { LoginContext } from '../context/Context';
 const Home = () => {
+   const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
    const { logindata } = useContext(LoginContext);
      const [loginUserId, setLoginUserId] = useState();
   console.log("login data",logindata)
@@ -42,7 +43,7 @@ const [accountId, setAccountId] = useState();
     };
 
     try {
-      const response = await fetch(`http://127.0.0.1/accounts/accountdetails/accountdetailslist/listbyuserid/${loginUserId}`, requestOptions);
+      const response = await fetch(`${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyuserid/${loginUserId}`, requestOptions);
       const result = await response.json();
       console.log("result",result);
  if (result.accounts && result.accounts.length > 0) {

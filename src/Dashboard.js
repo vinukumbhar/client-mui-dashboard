@@ -17,7 +17,7 @@ import { Link, Outlet } from "react-router-dom";
 import { Divider, Paper } from "@mui/material";
 export default function Dashboard(props) {
   const navigate = useNavigate();
-
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const { logindata, setLoginData } = useContext(LoginContext);
 
   const [data, setData] = useState(false);
@@ -31,7 +31,7 @@ export default function Dashboard(props) {
       headers: myHeaders,
       redirect: "follow",
     };
-    const url = `http://127.0.0.1/common/user/${id}`;
+    const url = `${LOGIN_API}/common/user/${id}`;
     fetch(url + loginsData, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -47,7 +47,7 @@ export default function Dashboard(props) {
   const DashboardValid = async () => {
     let token = localStorage.getItem("clientdatatoken");
 
-    const url = "http://127.0.0.1/common/clientlogin/verifytokenforclient";
+    const url = `${LOGIN_API}/common/clientlogin/verifytokenforclient`;
     const res = await fetch(url, {
       method: "GET",
       headers: {

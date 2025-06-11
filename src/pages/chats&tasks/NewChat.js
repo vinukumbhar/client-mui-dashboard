@@ -169,6 +169,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "material-react-toastify";
 
 function NewChat({ open, close, loginuserid, accId }) {
+
+     const CHAT_API = process.env.REACT_APP_CHAT_API;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
@@ -209,7 +211,7 @@ function NewChat({ open, close, loginuserid, accId }) {
       redirect: "follow",
     };
 
-    fetch("http://127.0.0.1/chats/chatsaccountwise", requestOptions)
+    fetch(`${CHAT_API}/chats/chatsaccountwise`, requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

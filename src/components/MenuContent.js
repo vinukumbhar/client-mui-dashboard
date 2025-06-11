@@ -106,9 +106,9 @@ export default function MenuContent({ collapsed }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [menuItems, setMenuItems] = React.useState([]);
-
+const SIDEBAR_API = process.env.REACT_APP_SIDEBAR_URL
   React.useEffect(() => {
-    fetch("http://127.0.0.1/clientsidebar/")
+    fetch(`${SIDEBAR_API}/clientsidebar/`)
       .then((res) => res.json())
       .then((data) => setMenuItems(data))
       .catch((err) => console.error("Failed to fetch menu:", err));

@@ -7,6 +7,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 const ChatsList = ({ accountId }) => {
+  const CHAT_API  = process.env.REACT_APP_CHAT_API
   const [chats, setChats] = useState([]);
   const theme = useTheme();
 
@@ -14,7 +15,7 @@ const ChatsList = ({ accountId }) => {
     const fetchUnreadChats = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1/chats/unread/${accountId}/Admin`
+          `${CHAT_API}/chats/unread/${accountId}/Admin`
         );
         setChats(response.data.chats || []);
         console.log("unread chat messages:", response.data.chats);
@@ -47,7 +48,7 @@ const ChatsList = ({ accountId }) => {
     try {
       // Mark as read
       await axios.patch(
-        `http://127.0.0.1/chats/mark-all-read/${chatId}/accounts/${accountId}/Admin`
+        `${CHAT_API}/chats/mark-all-read/${chatId}/accounts/${accountId}/Admin`
       );
 
       // Navigate to the chat

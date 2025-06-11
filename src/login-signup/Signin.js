@@ -125,7 +125,7 @@ const setVal = (e) => {
 };
 
 
-
+const LOGIN_API = process.env.REACT_APP_USER_LOGIN
 
   
 const handleSubmit = async (e) => {
@@ -153,7 +153,7 @@ const handleSubmit = async (e) => {
   try {
     // Check user status via GET (encode email for URL safety)
     // const encodedEmail = encodeURIComponent(email);
-    const checkUserUrl = `http://127.0.0.1/common/user/email/getuserbyemail/${email}`;
+    const checkUserUrl = `${LOGIN_API}/common/user/email/getuserbyemail/${email}`;
     
     const checkUserResponse = await fetch(checkUserUrl, {
       method: "GET",
@@ -178,7 +178,7 @@ const handleSubmit = async (e) => {
     }
 
     // If active, proceed with login (POST)
-    const loginUrl = `http://127.0.0.1/common/clientlogin/generatetokenforclient`;
+    const loginUrl = `${LOGIN_API}/common/clientlogin/generatetokenforclient`;
     const loginResponse = await fetch(loginUrl, {
       method: "POST",
       headers: {

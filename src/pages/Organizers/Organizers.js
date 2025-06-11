@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import OrganizerDialog from "./OrganizerDialog";
 const Organizers = () => {
+  const ORGANIZER_API = process.env.REACT_APP_ORGANIZER_TEMP_URL
+     const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const { logindata } = useContext(LoginContext);
   const [loginuserid, setLoginUserId] = useState("");
   const [organizersList, setOrganizersList] = useState([]);
@@ -30,7 +32,7 @@ const Organizers = () => {
   const fetchAccountId = (id) => {
     axios
       .get(
-        `http://127.0.0.1/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
+        `${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`
       )
       .then((response) => {
         const accountId = response.data.accounts[0]._id;
@@ -42,7 +44,7 @@ const Organizers = () => {
   const [isActiveTrue, setIsActiveTrue] = useState(true);
   const fetchOrganizers = async (accountId) => {
     try {
-      const url = `http://127.0.0.1/workflow/orgaccwise/organizeraccountwise/organizerbyaccount/${accountId}/${isActiveTrue}`;
+      const url = `${ORGANIZER_API}/workflow/orgaccwise/organizeraccountwise/organizerbyaccount/${accountId}/${isActiveTrue}`;
 
       const response = await fetch(url);
       if (!response.ok) {

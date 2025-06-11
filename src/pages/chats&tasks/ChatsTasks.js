@@ -282,6 +282,8 @@ import { useNavigate } from "react-router-dom";
 import NewChat from "./NewChat";
 
 const ChatsTasks = () => {
+   const CHAT_API = process.env.REACT_APP_CHAT_API;
+    const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -293,7 +295,7 @@ const ChatsTasks = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `http://127.0.0.1/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`,
+      url: `${ACCOUNT_API}/accounts/accountdetails/accountdetailslist/listbyuserid/${id}`,
       headers: {},
     };
 
@@ -323,7 +325,7 @@ const ChatsTasks = () => {
       method: "GET",
       redirect: "follow",
     };
-    const url = `http://127.0.0.1/chats/chatsaccountwise/isactivechat/${accId}/${ActiveTrue}`;
+    const url = `${CHAT_API}/chats/chatsaccountwise/isactivechat/${accId}/${ActiveTrue}`;
 
     fetch(url, requestOptions)
       .then((response) => response.json())
@@ -354,7 +356,7 @@ const ChatsTasks = () => {
   const handleShowChat = async (chatId) => {
     try {
       // Mark as read
-      await axios.patch(`http://127.0.0.1/chats/mark-all-read/${chatId}/accounts/${accId}/Admin`);
+      await axios.patch(`${CHAT_API}/chats/mark-all-read/${chatId}/accounts/${accId}/Admin`);
       
       // Navigate to the chat
       navigate(`/updatechat/${chatId}`);

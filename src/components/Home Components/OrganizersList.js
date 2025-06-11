@@ -5,11 +5,12 @@ import { Stack, Typography } from "@mui/material";
 import OrganizerDialog from "../../pages/Organizers/OrganizerDialog";
 
 const OrganizersList = ({ accountId }) => {
+  const ORGANIZER_API = process.env.REACT_APP_ORGANIZER_TEMP_URL;
   const [organizers, setOrganizers] = useState([]);
  
   const fetchOrganizers = async () => {
     try {
-      const url = `http://127.0.0.1/workflow/orgaccwise/organizer/pending/${accountId}`;
+      const url = `${ORGANIZER_API}/workflow/orgaccwise/organizer/pending/${accountId}`;
 
       const response = await fetch(url);
       if (!response.ok) {

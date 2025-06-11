@@ -6,12 +6,13 @@ import {  Stack, Typography } from "@mui/material";
 import PaymentIcon from '@mui/icons-material/Payment';
 import { useNavigate } from "react-router-dom";
 const BillingList = ({ accountId }) => {
+  const INVOICE_API = process.env.REACT_APP_INVOICES_URL
   const theme = useTheme();
     const navigate = useNavigate();
   const [billingInvoices, setBiilingInvoices] = useState([])
    const fetchInvoices = async () => {
       try {
-        const url = `http://127.0.0.1/workflow/invoices/invoice/pending/invoicelistby/accountid/${accountId}`;
+        const url = `${INVOICE_API}/workflow/invoices/invoice/pending/invoicelistby/accountid/${accountId}`;
   
         const response = await fetch(url);
         if (!response.ok) {

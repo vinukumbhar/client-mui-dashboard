@@ -15,6 +15,7 @@ import { toast } from 'material-react-toastify';
 // import { useSnackbar } from 'notistack';
 
 const ProfilePictureUpload = ({ userId, currentImage, onUploadSuccess }) => {
+  const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(currentImage);
   const [isUploading, setIsUploading] = useState(false);
@@ -24,7 +25,7 @@ console.log("currentImage",currentImage)
     if (currentImage) {
       // Replace 'uploads/' with 'profilepicture/' in the path
       const transformedUrl = currentImage.replace('uploads/', 'profilepicture/');
-      setPreview(`http://127.0.0.1/${transformedUrl}`);
+      setPreview(`${LOGIN_API}/${transformedUrl}`);
     }
   }, [currentImage]);
   const handleImageChange = (e) => {
@@ -53,7 +54,7 @@ console.log("currentImage",currentImage)
     try {
       setIsUploading(true);
       const response = await axios.post(
-        `http://127.0.0.1/common/${userId}/profile-picture`,
+        `${LOGIN_API}/common/${userId}/profile-picture`,
         formData,
         {
           headers: {

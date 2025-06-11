@@ -191,6 +191,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function SideMenu() {
+   const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const { logindata, setLoginData } = useContext(LoginContext);
   const [loginuser, setLoginUser] = useState("");
   const [userData, setUserData] = useState("");
@@ -224,7 +225,7 @@ export default function SideMenu() {
       redirect: "follow",
     };
 
-    const url = `http://127.0.0.1/common/user/${id}`;
+    const url = `${LOGIN_API}/common/user/${id}`;
 
     try {
       const response = await fetch(url, requestOptions);
@@ -238,7 +239,7 @@ export default function SideMenu() {
       if (result.profilePicture) {
         // Remove the 'uploads/' prefix since your static route already handles it
         const imagePath = result.profilePicture.replace("uploads/", "");
-        const fullImageUrl = `http://127.0.0.1/profilepicture/${imagePath}`;
+        const fullImageUrl = `${LOGIN_API}/profilepicture/${imagePath}`;
         setProfilePicture(fullImageUrl);
         console.log("image url", fullImageUrl);
       } else {
@@ -255,7 +256,7 @@ export default function SideMenu() {
   const navigate = useNavigate();
   const logoutuser = async () => {
     let token = localStorage.getItem("clientdatatoken");
-    const url = "http://127.0.0.1/common/clientlogin/logout/";
+    const url = `${LOGIN_API}/common/clientlogin/logout/`;
 
     const requestOptions = {
       method: "POST",
