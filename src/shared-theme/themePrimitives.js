@@ -156,14 +156,14 @@
 //         }),
 //       },
       
-//       action: {
-//         hover: alpha(gray[200], 0.2),
-//         selected: `${alpha(gray[200], 0.3)}`,
-//         ...(mode === 'dark' && {
-//           hover: alpha(gray[600], 0.2),
-//           selected: alpha(gray[600], 0.3),
-//         }),
-//       },
+      // action: {
+      //   hover: alpha(gray[200], 0.2),
+      //   selected: `${alpha(gray[200], 0.3)}`,
+      //   ...(mode === 'dark' && {
+      //     hover: alpha(gray[600], 0.2),
+      //     selected: alpha(gray[600], 0.3),
+      //   }),
+      // },
 //     },
 //     typography: {
 //       fontFamily: 'Inter, sans-serif',
@@ -265,10 +265,10 @@
 //         warning: orange[400],
 //         menu: brand[600]
 //       },
-//       action: {
-//         hover: alpha(gray[200], 0.2),
-//         selected: `${alpha(gray[200], 0.3)}`,
-//       },
+      // action: {
+      //   hover: alpha(gray[200], 0.2),
+      //   selected: `${alpha(gray[200], 0.3)}`,
+      // },
 //       baseShadow:
 //         'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',
 //     },
@@ -564,12 +564,20 @@ export const getDesignTokens = (mode) => {
           menu: menu[300],
         }),
       },
-      action: {
-        hover: alpha(mode === 'dark' ? menu[700] : menu[200], 0.2),
-        selected: alpha(mode === 'dark' ? menu[700] : menu[300], 0.3),
+      // action: {
+      //   hover: alpha(mode === 'dark' ? menu[700] : menu[200], 0.2),
+      //   selected: alpha(mode === 'dark' ? menu[700] : menu[300], 0.3),
+      //   ...(mode === 'dark' && {
+      //     hover: alpha(menu[700], 0.4),
+      //     selected: alpha(menu[700], 0.6),
+      //   }),
+      // },
+            action: {
+        hover: alpha(gray[200], 0.2),
+        selected: `${alpha(gray[200], 0.3)}`,
         ...(mode === 'dark' && {
-          hover: alpha(menu[700], 0.4),
-          selected: alpha(menu[700], 0.6),
+          hover: alpha(gray[600], 0.2),
+          selected: alpha(gray[600], 0.3),
         }),
       },
     },
@@ -692,9 +700,13 @@ export const colorSchemes = {
         menu: menu[600],
         warning: orange[400],
       },
-      action: {
-        hover: alpha(menu[200], 0.2),
-        selected: alpha(menu[300], 0.3),
+      // action: {
+      //   hover: alpha(menu[200], 0.2),
+      //   selected: alpha(menu[300], 0.3),
+      // },
+            action: {
+        hover: alpha(brand[200], 0.2),
+        selected: `${alpha(brand[500],)}`,
       },
       baseShadow:
         'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',

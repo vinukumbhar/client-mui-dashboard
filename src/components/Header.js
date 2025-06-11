@@ -80,7 +80,7 @@ export default function Header() {
 >
   <MenuButton aria-label="Open notifications">
     <NotificationsRoundedIcon
-      sx={{ color: "text.menu" }}
+     
       fontSize="medium"
     />
   </MenuButton>

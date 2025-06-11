@@ -266,7 +266,19 @@ const handleConfirmPayment = async () => {
         <Button variant="outlined" onClick={() => window.history.back()}>
           Cancel
         </Button>
-        <Button variant="contained" color="primary" onClick={handleConfirmPayment}>
+        <Button 
+        // variant="contained"
+        size="small"
+        sx={{
+              backgroundColor: 'text.menu',
+              color: 'primary.contrastText',
+              '&:hover': {
+                backgroundColor: 'menu.dark',
+                boxShadow: 1,
+              },
+              transition: 'background-color 0.2s ease'
+            }}
+         color="primary" onClick={handleConfirmPayment}>
           Confirm Payment
         </Button>
       </Box>

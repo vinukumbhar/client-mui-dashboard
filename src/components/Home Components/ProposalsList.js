@@ -83,7 +83,7 @@ useEffect(() => {
                     boxShadow: 1,
                     transition: "all 0.3s",
                     cursor: "pointer",
-                    "&:hover .sign-link": {
+                    "&:hover .reviewsign-link": {
                       opacity: 1,
                       visibility: "visible",
                       textDecoration: "none",
@@ -114,7 +114,7 @@ useEffect(() => {
                       </Typography>
                     </Box>
                     <Typography
-                      className="sign-link"
+                      className="reviewsign-link"
                       color="primary"
                       variant="subtitle2"
                       component="p"

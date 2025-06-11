@@ -615,7 +615,7 @@ if (
           id="completeButton"
           style="
             display: none;
-            background-color: #4f46e5;
+            background-color: #3f80ff;
             color: white;
             border: none;
             padding: 12px 24px;

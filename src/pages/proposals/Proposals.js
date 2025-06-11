@@ -378,20 +378,26 @@ const Proposals = () => {
     //     ? "warning"
     //     : "default"
     // }
-         color="#000"
+         color="#fff"
     sx={{ 
       border: "none",
       ...(row.status === "Pending" && {
-        backgroundColor: "#ffc107",
-        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+        // backgroundColor: "#ffc107",
+        backgroundColor:"#FFA726",
+           color:"#fff"
+       
       }),
        ...(row.status === "Signed" && {
-        backgroundColor: "#198754",
-        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+        // backgroundColor: "#008000",
+        backgroundColor:"#0288D1",
+            color:"#fff"
+        
       }),
        ...(row.status === "Partially Signed" && {
-        backgroundColor: "#dc3545",
-        // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
+        // backgroundColor: "#FF0000",
+        backgroundColor:'#FBC02D',
+        color:"#fff"
+       
       })
     }}
     size="small"
@@ -406,11 +412,11 @@ const Proposals = () => {
             </TableCell>
 
             <TableCell>
-              {row.signed ? (
+              {/* {row.signed ? (
                 <Chip label="Signed" color="primary" size="small" />
               ) : (
                 <Chip label="Unsigned" variant="outlined" size="small" />
-              )}
+              )} */}
             </TableCell>
           </TableRow>
         ))}

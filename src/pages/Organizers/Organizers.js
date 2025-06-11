@@ -198,15 +198,16 @@ const Organizers = () => {
               {row.issealed === true && (
                 <Chip
                   label="Sealed"
-                  // color="info"
-                   color="#000"
+                  color="#fff"
+                 
                   size="small"
                   sx={{ 
       border: "none",
-      ...(row.issealed === "true" && {
-        backgroundColor: "#0d6efd",
+       backgroundColor:"#5C6BC0",
+        // backgroundColor: "#0000FF",
+         color:"#fff"
         // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
-      }),
+      
      
     }}
                 />
@@ -216,17 +217,21 @@ const Organizers = () => {
             <TableCell>
               <Chip
                 label={row.status}
-                color="#000"
-                // color={row.status === "Completed" ? "success" : "warning"}
+              
+                color="#fff"
                 size="small"
              sx={{ 
       border: "none",
       ...(row.status === "Pending" && {
-        backgroundColor: "#ffc107",
+        // backgroundColor: "#ffc107",
+        backgroundColor:"#FFA726",
+         color:"#fff"
         // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
       }),
       ...(row.status === "Completed" && {
-        backgroundColor: "#198754",
+        // backgroundColor: "#008000",
+        backgroundColor:"#2E7D32",
+      color:"#fff"
         // color: theme => theme.palette.getContrastText(theme.palette.warning.light)
       })
     }}

@@ -75,7 +75,7 @@ const handlePayInvoice = (invoice) => {
                    
                     transition: "all 0.3s",
                     cursor: "pointer",
-                    "&:hover .sign-link": {
+                    "&:hover .paysign-link": {
                       opacity: 1,
                       visibility: "visible",
                       textDecoration: "none",
@@ -107,7 +107,7 @@ const handlePayInvoice = (invoice) => {
                       </Typography>
                     </Box>
                     <Typography
-                      className="sign-link"
+                      className="paysign-link"
                       color="primary"
                       variant="subtitle2"
                       component="p"

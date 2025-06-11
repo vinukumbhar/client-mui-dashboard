@@ -73,7 +73,7 @@ const OrganizersList = ({ accountId }) => {
                     boxShadow: 1,
                     transition: "all 0.3s",
                     cursor: "pointer",
-                    "&:hover .sign-link": {
+                    "&:hover .completesign-link": {
                       opacity: 1,
                       visibility: "visible",
                       textDecoration: "none",
@@ -100,7 +100,7 @@ const OrganizersList = ({ accountId }) => {
                       </Typography>
                     </Box>
                     <Typography
-                      className="sign-link"
+                      className="completesign-link"
                       color="primary"
                       variant="subtitle2"
                       component="p"

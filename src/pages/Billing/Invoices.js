@@ -198,10 +198,19 @@ const Invoices = () => {
       <Box mt={3} mb={2}>
         {selected.length > 0 && (
           <Button
-            variant="contained"
+            // variant="contained"
+            size="small"
             color="primary"
             onClick={handlePayInvoice}
-            sx={{ mb: 2 }}
+           sx={{
+              backgroundColor: 'text.menu',
+              color: 'primary.contrastText',
+              '&:hover': {
+                backgroundColor: 'menu.dark',
+                boxShadow: 1,
+              },
+              transition: 'background-color 0.2s ease'
+            }}
           >
             Pay Invoice
           </Button>
