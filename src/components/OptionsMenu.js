@@ -45,7 +45,7 @@ export default function OptionsMenu() {
         Cookies.remove("clientuserToken");
         setLoginData(false);
 
-        navigate("/login");
+        navigate("/client/login");
       toast.success("Logout Successfully")
     } else {
         console.log("error");

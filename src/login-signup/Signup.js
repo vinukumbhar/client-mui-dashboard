@@ -129,7 +129,7 @@ const ClientSignUp = (props) => {
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
 
-  const handleSignInClick = () => navigate("/login");
+  const handleSignInClick = () => navigate("/client/login");
 
   // Step 1: Email verification
   const handleEmailSubmit = async (e) => {
@@ -251,7 +251,7 @@ const ClientSignUp = (props) => {
       if (otpVerify.data === "Email verified successfully") {
         await registerClient();
         toast.success("Registration successful!");
-        navigate("/login");
+        navigate("/client/login");
       } else {
         toast.error("OTP verification failed");
       }

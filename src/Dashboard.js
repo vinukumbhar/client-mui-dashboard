@@ -61,7 +61,7 @@ export default function Dashboard(props) {
     const data = await res.json();
 
     if (data.message === "Invalid token") {
-      navigate("/login");
+      navigate("/client/login");
     } else {
       setLoginData(data);
       setloginsData(data.user.id);
@@ -70,7 +70,7 @@ export default function Dashboard(props) {
         fetchUserData(data.user.id);
         // navigate("/home");
       } else {
-        navigate("/login");
+        navigate("/client/login");
 
         // }, 1000);
       }

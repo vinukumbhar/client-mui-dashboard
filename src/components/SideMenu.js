@@ -276,7 +276,7 @@ export default function SideMenu() {
       Cookies.remove("clientuserToken");
       setLoginData(false);
 
-      navigate("/login");
+      navigate("/client/login");
 
       toast.success("Logout Successfully");
     } else {

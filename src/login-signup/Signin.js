@@ -192,7 +192,7 @@ const handleSubmit = async (e) => {
     if (loginResult.status === 200) {
       localStorage.setItem("clientdatatoken", loginResult.result.token);
       Cookies.set("clientuserToken", loginResult.result.token);
-      navigate("/home");
+      navigate("/client/home");
       toast.success("Login Successful");
       setInpval({ ...inpval, email: "", password: "" });
     } else {

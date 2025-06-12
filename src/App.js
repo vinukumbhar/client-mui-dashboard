@@ -16,21 +16,21 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<SignIn />} />
-           <Route path="/signup" element={<Signup />} />
+        <Routes basename="/client">
+          <Route path="/client/login" element={<SignIn />} />
+           <Route path="/client/signup" element={<Signup />} />
           <Route path="/" element={<Dashboard />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/document" element={<Document />} />
-            <Route path="/chatstasks" element={<ChatsTasks />} />
-            <Route path="/updatechat/:_id" element={<UpdateChat />} />
+            <Route path="/client/home" element={<Home />} />
+            <Route path="/client/document" element={<Document />} />
+            <Route path="/client/chatstasks" element={<ChatsTasks />} />
+            <Route path="/client/updatechat/:_id" element={<UpdateChat />} />
 
-            <Route path="/organizers" element={<Organizers />} />
-            <Route path="/billing" element={<Invoices />} />
-            <Route path="/payinvoice" element={<PayInvoice/>}/>
-            <Route path="/proposalsels" element={<Proposals />} />
-            <Route path="/settings" element={<Settings/>}/>
-            <Route path="*" element={<Navigate to="/home" replace />} />
+            <Route path="/client/organizers" element={<Organizers />} />
+            <Route path="/client/billing" element={<Invoices />} />
+            <Route path="/client/payinvoice" element={<PayInvoice/>}/>
+            <Route path="/client/proposalsels" element={<Proposals />} />
+            <Route path="/client/settings" element={<Settings/>}/>
+            <Route path="*" element={<Navigate to="/client/home" replace />} />
           </Route>
         </Routes>
       </BrowserRouter>
