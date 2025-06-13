@@ -69,7 +69,7 @@ const Invoices = () => {
     }
   };
  const handlePayInvoice = () => {
-  navigate("/payinvoice", {
+  navigate("/client/payinvoice", {
     state: {
       selectedInvoices: BillingInvoice.filter(invoice => selected.includes(invoice._id)),
       accountName: accountName, // Replace with dynamic client/account name if needed

@@ -375,7 +375,7 @@ const UpdateChat = () => {
       <Grid container spacing={2}>
         <Grid
           size={{ xs: 12, md: 6 }}
-          sx={{ border: "2px solid red", height: "89vh", p: 2 }}
+          sx={{ height: "89vh", p: 2 }}
         >
           <Box>
             <Typography
@@ -646,8 +646,19 @@ const UpdateChat = () => {
             <Editor onChange={handleEditorChange} value={editorContent} />
             <Button
               onClick={() => updateChatDescription()}
-              variant="contained"
-              sx={{ height: "fit-content", alignSelf: "end" }}
+               sx={{
+              backgroundColor: 'text.menu',
+              height: "fit-content", alignSelf: "end" ,
+              color: 'primary.contrastText',
+              '&:hover': {
+                backgroundColor: 'menu.dark',
+                boxShadow: 1,
+              },
+              transition: 'background-color 0.2s ease'
+            }}
+         color="primary"
+              // variant="contained"
+              // sx={{ height: "fit-content", alignSelf: "end" }}
             >
               Send
             </Button>
@@ -655,7 +666,7 @@ const UpdateChat = () => {
         </Grid>
         <Grid
           size={{ xs: 12, md: 6 }}
-          sx={{ border: "2px solid red", height: "89vh", p: 2 }}
+          sx={{  height: "89vh", p: 2 }}
         >
           <Box>
             <Typography

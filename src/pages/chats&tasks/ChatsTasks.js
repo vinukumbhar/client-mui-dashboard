@@ -359,7 +359,7 @@ const ChatsTasks = () => {
       await axios.patch(`${CHAT_API}/chats/mark-all-read/${chatId}/accounts/${accId}/Admin`);
       
       // Navigate to the chat
-      navigate(`/updatechat/${chatId}`);
+      navigate(`/client/updatechat/${chatId}`);
     } catch (error) {
       console.error("Error marking message as read:", error);
     }

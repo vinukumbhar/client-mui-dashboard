@@ -34,7 +34,7 @@ const BillingList = ({ accountId }) => {
 console.log("billing", billingInvoices)
 
 const handlePayInvoice = (invoice) => {
-  navigate("/payinvoice", {
+  navigate("/client/payinvoice", {
     state: {
       selectedInvoices: [invoice],
       accountName: invoice.account.accountName, // Replace with dynamic client/account name if needed

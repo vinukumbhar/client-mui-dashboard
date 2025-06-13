@@ -35,19 +35,27 @@ const pathToName = {
 };
 
 export default function NavbarBreadcrumbs() {
-  const location = useLocation();
-  let pathnames = location.pathname.split('/').filter((x) => x);
+  // const location = useLocation();
+  // let pathnames = location.pathname.split('/').filter((x) => x);
 
-  if (customBreadcrumbMap[pathnames[0]]) {
+  // if (customBreadcrumbMap[pathnames[0]]) {
+  //   pathnames = customBreadcrumbMap[pathnames[0]];
+  // }
+const location = useLocation();
+
+  // Remove the `/client` prefix
+  let pathnames = location.pathname.replace(/^\/client/, '').split('/').filter(x => x);
+
+  // Apply custom mapping for special cases
+  if (pathnames[0] && customBreadcrumbMap[pathnames[0]]) {
     pathnames = customBreadcrumbMap[pathnames[0]];
   }
-
   return (
     <StyledBreadcrumbs
       aria-label="breadcrumb"
       separator={<NavigateNextRoundedIcon fontSize="small" />}
     >
-      <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to="/client/home" style={{ textDecoration: 'none', color: 'inherit' }}>
       <Box mt={0.5}>
       <HomeFilledIcon fontSize="small"  />
       </Box>

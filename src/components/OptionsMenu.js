@@ -21,11 +21,12 @@ const MenuItem = styled(MuiMenuItem)({
 });
 
 export default function OptionsMenu() {
+   const LOGIN_API = process.env.REACT_APP_USER_LOGIN
   const { logindata, setLoginData } = useContext(LoginContext);
   const navigate = useNavigate();
   const logoutuser = async () => {
     let token = localStorage.getItem("clientdatatoken");
-    const url = 'http://127.0.0.1/common/clientlogin/logout/';
+    const url = `${LOGIN_API}/common/clientlogin/logout/`;
 
     const requestOptions = {
         method: "POST",

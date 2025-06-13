@@ -52,7 +52,7 @@ const ChatsList = ({ accountId }) => {
       );
 
       // Navigate to the chat
-      navigate(`/updatechat/${chatId}`);
+      navigate(`/client/updatechat/${chatId}`);
 
       // Update local state
     } catch (error) {
