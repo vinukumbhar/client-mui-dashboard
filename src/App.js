@@ -15,8 +15,8 @@ import Settings from "./pages/Settings"
 const App = () => {
   return (
     <>
-      <BrowserRouter>
-        <Routes basename="/client">
+      <BrowserRouter basename="/client">
+        <Routes>
           <Route path="/client/login" element={<SignIn />} />
            <Route path="/client/signup" element={<Signup />} />
           <Route path="/" element={<Dashboard />}>

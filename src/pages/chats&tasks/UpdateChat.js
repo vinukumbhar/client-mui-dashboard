@@ -28,10 +28,33 @@ const UpdateChat = () => {
 
   useEffect(() => {
     if (logindata?.user?.id) {
-      setLoginUserId(logindata.user.id);
+      const id = logindata.user.id;
+      setLoginUserId(id);
+      // setLoginUserId(logindata.user.id);
+      fetchUserData(id)
     }
   }, [logindata]);
+   const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
+   const [senderEmail,setSenderEmail]= useState("")
+   const [senderName,setSenderName]=useState("")
+ const fetchUserData = async (id) => {
+  
+    const myHeaders = new Headers();
 
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    const url = `${LOGIN_API}/common/user/${id}`;
+    fetch(url , requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("id", result);
+        setSenderEmail(result.email)
+setSenderName(result.username)
+      });
+  };
   console.log("Login User ID:", loginUserId);
 
   const messageRefs = useRef({});
@@ -45,7 +68,8 @@ const UpdateChat = () => {
   const [chatDescriptions, setChatDescriptions] = useState([]);
   const [editorContent, setEditorContent] = useState("");
   const [tasks, setTasks] = useState([]);
-
+const [accountId,setaccountId]=useState("")
+const [chatTemplate, setChatTemplate]=useState("")
   const getsChatDetails = async () => {
     try {
       const url = `${CHAT_API}/chats/chatsaccountwise/`;
@@ -59,8 +83,10 @@ const UpdateChat = () => {
       setChatDetails(data.chat);
 
       setChatSubject(data.chat.chatsubject);
+      setChatTemplate(data.chat.chattemplateid)
       setTime(data.chat.updatedAt);
       setAccountName(data.chat.accountid.accountName);
+      setaccountId(data.chat.accountid._id)
       setChatDescriptions(data.chat.description || []);
     setTasks(data.chat.clienttasks.flat());
 
@@ -231,122 +257,127 @@ const UpdateChat = () => {
     setReplyTo(null);
   };
 
-  // const updateChatDescription = (message = "") => {
-  //   const contentToSend = message.trim() || editorContent.trim();
-  //   if (!contentToSend) return;
 
-  //   const newDescription = {
-  //     message: contentToSend,
-  //     fromwhome: "client",
-  //   };
 
-  //   if (replyTo) {
-  //     newDescription.replyTo = {
-  //       message: replyTo.message,
-  //       sender:
-  //         replyTo.fromwhome === "client" ? "You" : replyTo.senderid?.username,
-  //     };
-  //   }
+//   const updateChatDescription = (message = "") => {
+//     const contentToSend = message.trim() || editorContent.trim();
+//     if (!contentToSend) return;
 
-  //   setChatDescriptions((prev) => [
-  //     ...prev,
-  //     { ...newDescription, time: new Date().toISOString() },
-  //   ]);
+//     const newDescription = {
+//       message: contentToSend,
+//       fromwhome: "client",
+//       senderid: loginUserId,
+      
+//     };
 
-  //   setEditorContent("");
-  //   setReplyTo(null);
+//     if (replyTo) {
+//       newDescription.replyTo = replyTo._id; // ✅ Use the message ID, not custom object
+//     }
 
-  //   const raw = JSON.stringify({
-  //     newDescriptions: [newDescription],
-  //   });
+//     setChatDescriptions((prev) => [
+//       ...prev,
+//       { ...newDescription, time: new Date().toISOString() },
+//     ]);
 
-  //   fetch(`http://127.0.0.1/chats/chatsaccountwise/chatupdatemessage/${_id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: raw,
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) throw new Error("Failed to update");
-  //       return response.json();
-  //     })
-  //     .then(() => toast.success("Message sent"))
-  //     .catch(() => toast.error("Send failed"));
-  // };
+//     setEditorContent("");
+//     setReplyTo(null);
 
-  const updateChatDescription = (message = "") => {
-    const contentToSend = message.trim() || editorContent.trim();
-    if (!contentToSend) return;
+//     const raw = JSON.stringify({
+//       newDescriptions: [newDescription],
+//     });
+// console.log("jhgfsd",raw)
+//     fetch(`${CHAT_API}/chats/chatsaccountwise/chatupdatemessage/${_id}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: raw,
+//     })
+    
+//       .then((response) => {
+//         if (!response.ok) throw new Error("Failed to update");
+//         return response.json();
+//       })
+//       .then(() => {
+//         toast.success("Message sent");
+//            securemessagechatsend(_id);
+//         getsChatDetails();
+//       })
+//       .catch(() => toast.error("Send failed"));
+//   };
 
-    const newDescription = {
-      message: contentToSend,
-      fromwhome: "client",
-      senderid: loginUserId,
-    };
+const updateChatDescription = (message = "") => {
+  const contentToSend = message.trim() || editorContent.trim();
+  if (!contentToSend) return;
 
-    if (replyTo) {
-      newDescription.replyTo = replyTo._id; // ✅ Use the message ID, not custom object
-    }
-
-    setChatDescriptions((prev) => [
-      ...prev,
-      { ...newDescription, time: new Date().toISOString() },
-    ]);
-
-    setEditorContent("");
-    setReplyTo(null);
-
-    const raw = JSON.stringify({
-      newDescriptions: [newDescription],
-    });
-
-    fetch(`${CHAT_API}/chats/chatsaccountwise/chatupdatemessage/${_id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: raw,
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to update");
-        return response.json();
-      })
-      .then(() => {
-        toast.success("Message sent");
-        updatechatStatus(_id);
-        getsChatDetails();
-      })
-      .catch(() => toast.error("Send failed"));
+  const newDescription = {
+    message: contentToSend,
+    fromwhome: "client",
+    senderid: loginUserId,
   };
 
-  const updatechatStatus = (_id) => {
-    return new Promise((resolve, reject) => {
-      let data = JSON.stringify({
-        chatstatus: false,
-      });
+  if (replyTo) {
+    newDescription.replyTo = replyTo._id;
+  }
 
-      let config = {
-        method: "PATCH",
-        maxBodyLength: Infinity,
-        url: `${CHAT_API}/chats/chatsaccountwise/${_id}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
+  // Update UI optimistically
+  setChatDescriptions((prev) => [
+    ...prev,
+    { ...newDescription, time: new Date().toISOString() },
+  ]);
 
-      axios
-        .request(config)
-        .then((response) => {
-          console.log("Status updated:", JSON.stringify(response.data));
-          resolve(); // Resolve the promise if successful
-        })
-        .catch((error) => {
-          console.error("Error updating chat status:", error);
-          reject(error); // Reject the promise if there's an error
-        });
+  // Clear input and reply state
+  setEditorContent("");
+  setReplyTo(null);
+
+  // Prepare payload
+  const raw = JSON.stringify({
+    newDescriptions: [newDescription],
+  });
+
+  // Send to backend (new endpoint triggers email)
+  fetch(`${CHAT_API}/chats/chatsaccountwise/chatmessagefromclient/${_id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: raw,
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Failed to update");
+      return response.json();
+    })
+    .then(() => {
+      toast.success("Message sent & email triggered");
+      getsChatDetails(); // Reload chat details
+    })
+    .catch(() => toast.error("Send failed"));
+};
+
+     const securemessagechatsend = (chatId) => {
+    console.log("bvhg", chatId)
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      accountid: accountId,
+      chattemplateid: chatTemplate,
+      username: senderName,
+      viewchatlink: "/login",
+      chatId: chatId,
     });
+    console.log(raw);
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`${CHAT_API}/chatmsg/securemessagechatsend`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

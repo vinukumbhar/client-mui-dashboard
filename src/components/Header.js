@@ -64,29 +64,28 @@ export default function Header() {
             <NotificationsRoundedIcon sx={{color: "text.menu"}} fontSize="medium"/>
            
           </MenuButton> */}
-        
-        <Badge
-  badgeContent={4}
-  sx={{
-    "& .MuiBadge-badge": {
-      backgroundColor: "#FFA500", // Dark yellow (orange)
-      color: "#000000", // Black text for contrast
-    },
-  }}
-  anchorOrigin={{
-    vertical: "top",
-    horizontal: "right",
-  }}
->
-  <MenuButton aria-label="Open notifications">
-    <NotificationsRoundedIcon
-     
-      fontSize="medium"
-    />
-  </MenuButton>
-</Badge>
-          <Stack sx={{ml:1}}> <ColorModeIconDropdown /></Stack>
-         
+
+          <Badge
+            badgeContent={4}
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "#FFA500", // Dark yellow (orange)
+                color: "#000000", // Black text for contrast
+              },
+            }}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuButton aria-label="Open notifications">
+              <NotificationsRoundedIcon fontSize="medium" />
+            </MenuButton>
+          </Badge>
+          <Stack sx={{ ml: 1 }}>
+            {" "}
+            <ColorModeIconDropdown />
+          </Stack>
         </Stack>
       </Stack>
       <Divider />

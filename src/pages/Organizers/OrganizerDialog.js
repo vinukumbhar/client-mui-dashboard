@@ -13,6 +13,7 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
+import { useContext } from "react";
 
 import { LinearProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,7 +25,42 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { toast } from "material-react-toastify";
 import dayjs from "dayjs";
+import { LoginContext } from "../../context/Context";
+import { TextareaAutosize } from '@mui/material';
 const OrganizerDialog = ({ open, handleClose, organizer }) => {
+    const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
+ const { logindata } = useContext(LoginContext);
+  const [loginuserid, setLoginUserId] = useState();
+
+  useEffect(() => {
+    if (logindata?.user?.id) {
+      setLoginUserId(logindata.user.id);
+    }
+  }, [logindata]);
+    useEffect(() => {
+    if (loginuserid) {
+      fetchData();
+    }
+  }, [loginuserid]);
+  const [username, setUsername] = useState("");
+  const fetchData = async (id) => {
+    const myHeaders = new Headers();
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    const url = `${LOGIN_API}/common/user/${id}`;
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("id", result);
+
+        // console.log(userData)
+        setUsername(result.username);
+      });
+  };
     const ORGANIZER_API = process.env.REACT_APP_ORGANIZER_TEMP_URL
   const sections = organizer?.sections; // Assigned const here
   console.log("organizer", organizer);
@@ -36,7 +72,10 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
   const [answeredElements, setAnsweredElements] = useState({});
   const [activeStep, setActiveStep] = useState(0);
   const [startDate, setStartDate] = useState(dayjs());
-
+const handleCloseDialog = ()=>{
+  handleClose()
+  setActiveStep(0)
+}
   const handleRadioChange = (value, elementText, sectionId) => {
     const key = `${sectionId}_${elementText}`;
     setRadioValues((prevValues) => ({
@@ -258,6 +297,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
               })) || [],
           })) || [],
         status: "Completed",
+        completedby:loginuserid,
         active: true,
       });
 
@@ -268,7 +308,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
         redirect: "follow",
       };
       console.log("raw", raw);
-      const url = `${ORGANIZER_API}/workflow/orgaccwise/organizeraccountwise/${organizer._id}`;
+      const url = `${ORGANIZER_API}/workflow/orgaccwise/organizeraccountwise/completeandnotify/${organizer._id}`;
       const response = await fetch(url, requestOptions);
       const result = await response.json();
 
@@ -277,7 +317,9 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
       }
 
       toast.success("Organizer updated successfully");
-      handleClose();
+      // handleClose();
+      handleCloseDialog()
+      setActiveStep(1)
     } catch (error) {
       console.error("Error submitting organizer:", error);
       toast.error(
@@ -407,7 +449,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Dialog fullScreen open={open} onClose={handleClose}>
+      <Dialog fullScreen open={open} onClose={handleCloseDialog}>
         <DialogTitle
           sx={{
             display: "flex",
@@ -421,7 +463,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
           <Typography variant="h6" component="p">
             {organizer?.organizerName || "Organizer"}
           </Typography>
-          <IconButton edge="end" onClick={handleClose}>
+          <IconButton edge="end" onClick={handleCloseDialog}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -524,11 +566,12 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
                                 >
                                   {element.text}
                                 </Typography>
-                                <TextField
+                                {/* <TextField
                                   disabled={isElementActive(element)}
                                   variant="outlined"
                                   size="small"
                                   multiline
+                                  
                                   fullWidth
                                   placeholder={`${element.type} Answer`}
                                   inputProps={{
@@ -551,7 +594,36 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
                                       section.id
                                     )
                                   }
-                                />
+                                /> */}
+                                <TextareaAutosize
+  disabled={isElementActive(element)}
+  placeholder={`${element.type} Answer`}
+  value={inputValues[`${section.id}_${element.text}`] || ""}
+  onChange={(e) => handleInputChange(e, element.text, section.id)}
+  minRows={2}
+  maxRows={8}
+  // style={{
+  //   width: '100%',
+  //   padding: '10px 14px',
+  //   fontSize: '0.875rem',
+  //   fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+  //   borderRadius: 10,
+  //   border: '1px solid rgba(0, 0, 0, 0.23)',
+  //   outline: 'none',
+  // }}
+  style={{
+    width: '100%',
+     padding: '10px 14px',
+    fontSize: '0.875rem',
+    fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 8,
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+  }}
+  onFocus={(e) => e.target.style.border = '2px solid #1976d2'}  // Blue MUI primary color
+  onBlur={(e) => e.target.style.border = '1px solid rgba(0, 0, 0, 0.23)'}
+/>
                               </Box>
                             )}
 
@@ -565,7 +637,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
                                 >
                                   {element.text}
                                 </Typography>
-                                <TextField
+                                {/* <TextField
                                   disabled={isElementActive(element)}
                                   variant="outlined"
                                   size="small"
@@ -598,7 +670,42 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
                                       section.id
                                     );
                                   }}
-                                />
+                                /> */}
+                                 <TextareaAutosize
+  disabled={isElementActive(element)}
+  placeholder={`${element.type} Answer`}
+ value={
+                                    inputValues[
+                                      `${section.id}_${element.text}`
+                                    ] || ""
+                                  }
+                                  onChange={(e) => {
+                                    const numericValue = e.target.value.replace(
+                                      /\D/g,
+                                      ""
+                                    );
+                                    handleInputChange(
+                                      { target: { value: numericValue } },
+                                      element.text,
+                                      section.id
+                                    );
+                                  }}
+  minRows={2}
+  maxRows={8}
+ 
+  style={{
+    width: '100%',
+     padding: '10px 14px',
+    fontSize: '0.875rem',
+    fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 8,
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+  }}
+  onFocus={(e) => e.target.style.border = '2px solid #1976d2'}  // Blue MUI primary color
+  onBlur={(e) => e.target.style.border = '1px solid rgba(0, 0, 0, 0.23)'}
+/>
                               </Box>
                             )}
 
