@@ -6,10 +6,10 @@ import { FaTimes } from "react-icons/fa";
 const UploadDocument = ({ open, onClose, file ,fetchUnSealedFolders,fetchAdminPrivateFolders,accountId,fetchBothFolders,accountName}) => {
  
   const DOCS_MANAGMENTS = process.env.REACT_APP_CLIENT_DOCS_MANAGE;
- const ACCOUNT_API = process.env.REACT_APP_ACCOUNTS_URL;
+
   const [structFolder, setStructFolder] = useState(null);
   const [privateStructFolder, setPrivateStructFolder] = useState(null);
-  const [privateFolderPath, setPrivateFolderPath] = useState("");
+ 
   const [error, setError] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [newFolderPath, setNewFolderPath] = useState("");

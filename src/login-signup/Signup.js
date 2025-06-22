@@ -163,13 +163,13 @@ const ClientSignUp = (props) => {
         }
       );
 
-      const result = await userCheck.json();
-      if (result.user?.length > 0) {
-        toast.error("User with this email already exists", {
-          position: "top-right",
-        });
-        return;
-      }
+      // const result = await userCheck.json();
+      // if (result.user?.length > 0) {
+      //   toast.error("User with this email already exists", {
+      //     position: "top-right",
+      //   });
+      //   return;
+      // }
 
       // Send OTP
       const otpResponse = await axios.post(
@@ -247,13 +247,14 @@ const ClientSignUp = (props) => {
           otp: otp,
         }
       );
-
+console.log("OTP Verification Response:", otpVerify);
       if (otpVerify.data === "Email verified successfully") {
         await registerClient();
         toast.success("Registration successful!");
         navigate("/client/login");
       } else {
         toast.error("OTP verification failed");
+        
       }
     } catch (error) {
       console.error("Error:", error);
@@ -261,37 +262,75 @@ const ClientSignUp = (props) => {
     }
   };
 
-  const registerClient = async () => {
-    try {
-      // Register client
-      const clientResponse = await fetch(
-        `${LOGIN_API}/admin/clientsignup/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            firstName: formData.firstname,
-            middleName: formData.middleName,
-            lastName: formData.lastName,
-            phoneNumber: formData.phoneNumber,
-            accountName: formData.accountName,
-            password: formData.password,
-            cpassword: formData.cpassword,
-          }),
-        }
-      );
+//   const registerClient = async () => {
+//     try {
+//       // Register client
+//       const clientResponse = await fetch(
+//         `${LOGIN_API}/admin/clientsignup/`,
+//         {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({
+//             email: formData.email,
+//             firstName: formData.firstname,
+//             middleName: formData.middleName,
+//             lastName: formData.lastName,
+//             phoneNumber: formData.phoneNumber,
+//             accountName: formData.accountName,
+//             password: formData.password,
+//             cpassword: formData.cpassword,
+//           }),
+//         }
+//       );
+// console.log(clientResponse)
+//       const clientResult = await clientResponse.json();
+//       setClientIdUpdate(clientResult.client._id);
 
-      const clientResult = await clientResponse.json();
-      setClientIdUpdate(clientResult.client._id);
+//       // Create user account
+//       await createUserAccount(clientResult.client._id);
+//     } catch (error) {
+//       console.error("Client registration error:", error);
+//       throw error;
+//     }
+//   };
+const registerClient = async () => {
+  try {
+    const clientResponse = await fetch(`${LOGIN_API}/admin/clientsignup/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.email,
+        firstName: formData.firstname,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        phoneNumber: formData.phoneNumber,
+        accountName: formData.accountName,
+        password: formData.password,
+        cpassword: formData.cpassword,
+      }),
+    });
 
-      // Create user account
-      await createUserAccount(clientResult.client._id);
-    } catch (error) {
-      console.error("Client registration error:", error);
-      throw error;
+    const clientResult = await clientResponse.json();
+
+    console.log("Client Signup Response:", clientResult);
+
+    if (!clientResponse.ok) {
+      throw new Error(clientResult.message || "Client signup failed");
     }
-  };
+
+    if (!clientResult.client || !clientResult.client._id) {
+      throw new Error("Client ID not returned in response");
+    }
+
+    setClientIdUpdate(clientResult.client._id);
+
+    // Proceed to create user account
+    await createUserAccount(clientResult.client._id);
+  } catch (error) {
+    console.error("Client registration error:", error);
+    throw error;
+  }
+};
 
   const createUserAccount = async (clientId) => {
     try {
@@ -308,7 +347,7 @@ const ClientSignUp = (props) => {
       });
 
       const userResult = await userResponse.json();
-
+console.log("User Signup Response:", userResult);
       // Update client with user ID
       await fetch(`${LOGIN_API}/admin/clientsignup/${clientId}`, {
         method: "PATCH",
@@ -382,7 +421,7 @@ const ClientSignUp = (props) => {
     const urlportlogin = `${port}/`;
 
     try {
-      await fetch(`http://127.0.0.1/newclientsavedemail/`, {
+      await fetch(`http://127.0.0.1/clientmail/clientsavedemail`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
