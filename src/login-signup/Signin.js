@@ -692,7 +692,10 @@ console.log("Stringified payload:", JSON.stringify(loginPayload));
         console.error("Login failed with message:", loginResult.message);
         toast.error(loginResult.message || "Login failed");
       }
-    } catch (error) {
+    } 
+    
+    
+    catch (error) {
       console.group("Login Error");
       console.error("Error object:", error);
       console.error("Error message:", error.message);

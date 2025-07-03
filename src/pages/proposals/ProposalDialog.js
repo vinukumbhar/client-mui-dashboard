@@ -189,8 +189,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 const ProposalDialog = ({ open, handleClose, proposal }) => {
-  const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_URL
-    // console.log("proposals", proposal)
+ 
   const [selectedSection, setSelectedSection] = useState(null);
   const sectionRefs = useRef({});
 
@@ -239,56 +238,7 @@ const ProposalDialog = ({ open, handleClose, proposal }) => {
       content: proposal.termsandconditions,
     });
   }
-//   if (
-//   proposal.servicesandinvoices &&
-//   proposal.Additemizedserviceswithoutcreatinginvoices === "service"
-// ) {
-//   const serviceHTML = `
-//     <div style="font-family: Arial, sans-serif; color: #1e1e1e;">
-//       <table style="width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden;">
-//         <thead style="background-color: #f9fafb;">
-//           <tr>
-//             <th style="text-align: left; padding: 8px;">Service</th>
-//             <th style="text-align: right; padding: 8px;">Rate</th>
-//             <th style="text-align: right; padding: 8px;">Qty</th>
-//             <th style="text-align: right; padding: 8px;">Tax</th>
-//             <th style="text-align: right; padding: 8px;">Amount</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           ${proposal.lineItems
-//             .map(
-//               (item) => `
-//               <tr>
-//                 <td style="padding: 8px;">
-//                   <div><strong>${item.productorService}</strong></div>
-//                   <div style="font-size: 12px; color: #6b7280;">${item.description}</div>
-//                 </td>
-//                 <td style="text-align: right; padding: 8px;">$ ${Number(item.rate).toFixed(2)}</td>
-//                 <td style="text-align: right; padding: 8px;">${item.quantity}</td>
-//                 <td style="text-align: right; padding: 8px;">$ ${item.tax ? "0.00" : "0.00"}</td>
-//                 <td style="text-align: right; padding: 8px;">$ ${Number(item.amount).toFixed(2)}</td>
-//               </tr>
-//             `
-//             )
-//             .join("")}
-//         </tbody>
-//         <tfoot>
-//           <tr>
-//             <td colspan="4" style="text-align: right; padding: 8px;"><strong>Total</strong></td>
-//             <td style="text-align: right; padding: 8px;"><strong>$ ${proposal.summary?.total.toFixed(2)}</strong></td>
-//           </tr>
-//         </tfoot>
-//       </table>
-//     </div>
-//   `;
 
-//   sections.push({
-//     key: "services",
-//     label: "Services",
-//     content: serviceHTML,
-//   });
-// }
 
 if (
   proposal.servicesandinvoices &&
@@ -349,166 +299,7 @@ if (
 }
 
 
-//   if (
-//     proposal.servicesandinvoices &&
-//     proposal.Additemizedserviceswithoutcreatinginvoices === "service"
-//   ) {
-//     const serviceHTML = proposal.lineItems
-//       .map(
-//         (item) => `
-//         <div style="margin-bottom: 10px;">
-//           <strong>${item.productorService}</strong> - ${item.description}<br/>
-//           Rate: $${item.rate}, Qty: ${item.quantity}, Amount: $${item.amount}
-//           ${item.tax ? " (Taxable)" : ""}
-//         </div>
-//       `
-//       )
-//       .join("");
-//     sections.push({
-//       key: "services",
-//       label: "Services",
-//       content: serviceHTML,
-//     });
-//   }
 
-
-// if (
-//   proposal.servicesandinvoices &&
-//   proposal.Addinvoiceoraskfordeposit === "invoice"
-// ) {
-//   const invoiceHTML = `
-//     <div style="font-family: Arial, sans-serif; color: #1e1e1e;">
-//       <div style="margin-bottom: 20px;">
-//         <p><strong>Amount</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">$${proposal.summary?.total.toFixed(2)}</p>
-        
-//         <p><strong>Invoice will be issued</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">${proposal.issueinvoice}</p>
-        
-//         <p><strong>Description</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">${proposal.description}</p>
-//       </div>
-
-//       <div>
-//         <p style="font-weight: bold; margin-bottom: 10px;">&#x25BC; Invoice details</p>
-//         <table style="width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb;">
-//           <thead style="background-color: #f9fafb;">
-//             <tr>
-//               <th style="text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb;">Service</th>
-//               <th style="text-align: right; padding: 8px; border-bottom: 1px solid #e5e7eb;">Rate</th>
-//               <th style="text-align: right; padding: 8px; border-bottom: 1px solid #e5e7eb;">Qty</th>
-//               <th style="text-align: right; padding: 8px; border-bottom: 1px solid #e5e7eb;">Tax</th>
-//               <th style="text-align: right; padding: 8px; border-bottom: 1px solid #e5e7eb;">Amount</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             ${proposal.lineItems
-//               .map(
-//                 (item) => `
-//                 <tr>
-//                   <td style="padding: 8px;">
-//                     <div><strong>${item.productorService}</strong></div>
-//                     <div style="font-size: 12px; color: #6b7280;">${item.description}</div>
-//                   </td>
-//                   <td style="text-align: right; padding: 8px;">$ ${Number(item.rate).toFixed(2)}</td>
-//                   <td style="text-align: right; padding: 8px;">${item.quantity}</td>
-//                   <td style="text-align: right; padding: 8px;">$ ${item.tax ? "0.00" : "0.00"}</td>
-//                   <td style="text-align: right; padding: 8px;">$ ${Number(item.amount).toFixed(2)}</td>
-//                 </tr>
-//               `
-//               )
-//               .join("")}
-//           </tbody>
-//           <tfoot>
-//             <tr>
-//               <td colspan="4" style="text-align: right; padding: 8px; border-top: 1px solid #e5e7eb;"><strong>Total</strong></td>
-//               <td style="text-align: right; padding: 8px; border-top: 1px solid #e5e7eb;"><strong>$ ${proposal.summary?.total.toFixed(2)}</strong></td>
-//             </tr>
-//           </tfoot>
-//         </table>
-//       </div>
-//     </div>
-//   `;
-
-//   sections.push({
-//     key: "invoices",
-//     label: "Invoices",
-//     content: invoiceHTML,
-//   });
-// }
-
-// if (
-//   proposal.servicesandinvoices &&
-//   proposal.Addinvoiceoraskfordeposit === "invoice"
-// ) {
-//   const invoiceHTML = `
-//     <div style="font-family: Arial, sans-serif; color: #1e1e1e;">
-//       <div style="margin-bottom: 20px;">
-//         <p><strong>Amount</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">$${proposal.summary?.total.toFixed(2)}</p>
-
-//         <p><strong>Invoice will be issued</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">${proposal.issueinvoice}</p>
-
-//         <p><strong>Description</strong></p>
-//         <p style="background-color: #f9fafb; padding: 10px; border-radius: 8px;">${proposal.description}</p>
-//       </div>
-
-//       <div>
-//         <p 
-//           style="font-weight: bold; margin-bottom: 10px; cursor: pointer;"
-//           onclick="const table = this.nextElementSibling; const arrow = this.querySelector('span'); if (table.style.display === 'none') { table.style.display = 'block'; arrow.innerHTML = '&#x25B2;'; } else { table.style.display = 'none'; arrow.innerHTML = '&#x25BC;'; }"
-//         >
-//           <span>&#x25BC;</span> Invoice details
-//         </p>
-
-//         <div style="display: none;">
-//           <table style="width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb;">
-//             <thead style="background-color: #f9fafb;">
-//               <tr>
-//                 <th style="text-align: left; padding: 8px;">Service</th>
-//                 <th style="text-align: right; padding: 8px;">Rate</th>
-//                 <th style="text-align: right; padding: 8px;">Qty</th>
-//                 <th style="text-align: right; padding: 8px;">Tax</th>
-//                 <th style="text-align: right; padding: 8px;">Amount</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               ${proposal.lineItems
-//                 .map(
-//                   (item) => `
-//                   <tr>
-//                     <td style="padding: 8px;">
-//                       <div><strong>${item.productorService}</strong></div>
-//                       <div style="font-size: 12px; color: #6b7280;">${item.description}</div>
-//                     </td>
-//                     <td style="text-align: right; padding: 8px;">$ ${Number(item.rate).toFixed(2)}</td>
-//                     <td style="text-align: right; padding: 8px;">${item.quantity}</td>
-//                     <td style="text-align: right; padding: 8px;">$ ${item.tax ? "0.00" : "0.00"}</td>
-//                     <td style="text-align: right; padding: 8px;">$ ${Number(item.amount).toFixed(2)}</td>
-//                   </tr>
-//                 `
-//                 )
-//                 .join("")}
-//             </tbody>
-//             <tfoot>
-//               <tr>
-//                 <td colspan="4" style="text-align: right; padding: 8px;"><strong>Total</strong></td>
-//                 <td style="text-align: right; padding: 8px;"><strong>$ ${proposal.summary?.total.toFixed(2)}</strong></td>
-//               </tr>
-//             </tfoot>
-//           </table>
-//         </div>
-//       </div>
-//     </div>
-//   `;
-
-//   sections.push({
-//     key: "invoices",
-//     label: "Invoices",
-//     content: invoiceHTML,
-//   });
-// }
 if (
   proposal.servicesandinvoices &&
   proposal.Addinvoiceoraskfordeposit === "invoice"

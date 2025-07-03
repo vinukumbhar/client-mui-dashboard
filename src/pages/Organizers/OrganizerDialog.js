@@ -31,6 +31,7 @@ const OrganizerDialog = ({ open, handleClose, organizer }) => {
     const LOGIN_API = process.env.REACT_APP_USER_LOGIN;
  const { logindata } = useContext(LoginContext);
   const [loginuserid, setLoginUserId] = useState();
+const [emailErrors, setEmailErrors] = useState({});
 
   useEffect(() => {
     if (logindata?.user?.id) {
@@ -599,7 +600,20 @@ const handleCloseDialog = ()=>{
   disabled={isElementActive(element)}
   placeholder={`${element.type} Answer`}
   value={inputValues[`${section.id}_${element.text}`] || ""}
-  onChange={(e) => handleInputChange(e, element.text, section.id)}
+  // onChange={(e) => handleInputChange(e, element.text, section.id)}
+  onChange={(e) => {
+        handleInputChange(e, element.text, section.id);
+
+        // Additional email validation logic
+        if (element.type === "Email") {
+          const email = e.target.value;
+          const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          setEmailErrors((prev) => ({
+            ...prev,
+            [`${section.id}_${element.text}`]: !isValid,
+          }));
+        }
+      }}
   minRows={2}
   maxRows={8}
   // style={{
@@ -624,6 +638,12 @@ const handleCloseDialog = ()=>{
   onFocus={(e) => e.target.style.border = '2px solid #1976d2'}  // Blue MUI primary color
   onBlur={(e) => e.target.style.border = '1px solid rgba(0, 0, 0, 0.23)'}
 />
+{element.type === "Email" &&
+      emailErrors?.[`${section.id}_${element.text}`] && (
+        <Typography variant="caption" color="error">
+          Please enter a valid email address.
+        </Typography>
+      )}
                               </Box>
                             )}
 
