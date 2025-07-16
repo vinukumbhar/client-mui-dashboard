@@ -223,8 +223,29 @@ const Proposals = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedProposal(null);
+     
   };
-
+const signProposal = async (signatureData) => {
+  console.log("signatureData",signatureData)
+  try {
+    const response = await axios.patch(
+      `${PROPOSAL_API}/proposalandels/proposalaccountwise/${signatureData.proposalId}/sign`,
+      {
+        
+        signature: signatureData.signature,
+        signedAt: signatureData.signedAt,
+          signedBy:signatureData.signedBy
+      },
+      
+    );
+ console.log(response)
+    return response.data;
+   
+  } catch (error) {
+    console.error('Error signing proposal:', error);
+    throw error;
+  }
+};
   return (
     <Box sx={{ width: "100%", maxWidth: "1700px", p: 2 }}>
       <Typography variant="h4" fontWeight={600} gutterBottom>
@@ -427,11 +448,24 @@ const Proposals = () => {
   </TableContainer>
 </Box>
 
-      <ProposalDialog
+      {/* <ProposalDialog
         open={openDialog}
         handleClose={handleCloseDialog}
         proposal={selectedProposal}
-      />
+      /> */}
+      <ProposalDialog
+  open={openDialog}
+  handleClose={handleCloseDialog}
+  proposal={selectedProposal}
+  onProposalSigned={async (signatureData) => {
+    try {
+      await signProposal(signatureData);
+      // Optionally refresh your proposals list or update state
+    } catch (error) {
+      console.error('Error signing proposal:', error);
+    }
+  }}
+/>
     </Box>
   );
 };

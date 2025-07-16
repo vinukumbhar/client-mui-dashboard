@@ -9,7 +9,7 @@ import {
 
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
-
+import axios from "axios";
 import ProposalDialog from "../../pages/proposals/ProposalDialog"; 
 const ProposalsList = ({accountId}) => {
   const PROPOSAL_API = process.env.REACT_APP_PROPOSAL_URL
@@ -50,7 +50,28 @@ useEffect(() => {
     setOpenDialog(false);
     setSelectedProposal(null);
   };
-
+const signProposal = async (signatureData) => {
+  console.log("signatureData",signatureData)
+  try {
+    const response = await axios.patch(
+      `${PROPOSAL_API}/proposalandels/proposalaccountwise/${signatureData.proposalId}/sign`,
+      {
+        
+        signature: signatureData.signature,
+        signedAt: signatureData.signedAt,
+        signedBy:signatureData.signedBy
+        
+      },
+      
+    );
+ console.log(response)
+    return response.data;
+   
+  } catch (error) {
+    console.error('Error signing proposal:', error);
+    throw error;
+  }
+};
   return (
     <>
       {proposals.length > 0 && (
@@ -141,12 +162,24 @@ useEffect(() => {
 
       {/* Fullscreen Dialog */}
 
-      <ProposalDialog
+      {/* <ProposalDialog
   open={openDialog}
   handleClose={handleCloseDialog}
   proposal={selectedProposal}
+/> */}
+<ProposalDialog
+  open={openDialog}
+  handleClose={handleCloseDialog}
+  proposal={selectedProposal}
+  onProposalSigned={async (signatureData) => {
+    try {
+      await signProposal(signatureData);
+      // Optionally refresh your proposals list or update state
+    } catch (error) {
+      console.error('Error signing proposal:', error);
+    }
+  }}
 />
-
     </>
   );
 };

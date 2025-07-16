@@ -376,7 +376,7 @@ const ChatsTasks = () => {
     <Box
       sx={{
         width: "100%",
-        maxWidth: { sm: "100%", md: "1700px" },
+        maxWidth: { sm:  "100%", md: "1700px" },
         flexGrow: 1,
         height: "90vh",
         p: 1,
@@ -391,7 +391,7 @@ const ChatsTasks = () => {
         <Grid item>
           <Button
             size="small"
-            color="primary"
+           color="primary"
             fullWidth={isSmallScreen}
             onClick={handleOpen}
             sx={{
